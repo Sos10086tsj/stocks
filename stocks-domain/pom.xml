@@ -12,12 +12,6 @@
 	<name>stocks-domain</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
-		<!-- lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		
 		<!-- jpa and hibernate -->
 			<dependency>

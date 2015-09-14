@@ -6,9 +6,6 @@ import javax.persistence.Table;
 
 import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /** 
  * Description: 股票模型
  * @author Paris Tao
@@ -18,7 +15,7 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "stock")
-public @Getter @Setter class Stock extends BaseEntity<Long>{
+public class Stock extends BaseEntity<Long>{
 	/**
 	 * 
 	 */
@@ -32,4 +29,30 @@ public @Getter @Setter class Stock extends BaseEntity<Long>{
 	private String marketCode;	//市场		sz		@link com.chinesedreamer.stocks.domain.market.model.Market.code
 	@Column
 	private String pinyin;		//股票拼音简写	WKA
+	public String getCode() {
+		return code;
+	}
+	public String getName() {
+		return name;
+	}
+	public String getMarketCode() {
+		return marketCode;
+	}
+	public String getPinyin() {
+		return pinyin;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setMarketCode(String marketCode) {
+		this.marketCode = marketCode;
+	}
+	public void setPinyin(String pinyin) {
+		this.pinyin = pinyin;
+	}
+	
+	
 }

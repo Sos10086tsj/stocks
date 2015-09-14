@@ -6,9 +6,6 @@ import javax.persistence.Table;
 
 import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /** 
  * Description: 股票市场，比如上海、深证
  * @author Paris Tao
@@ -18,7 +15,7 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "market")
-public @Getter @Setter class Market extends BaseEntity<Long>{
+public class Market extends BaseEntity<Long>{
 	/**
 	 * 
 	 */
@@ -27,4 +24,18 @@ public @Getter @Setter class Market extends BaseEntity<Long>{
 	private String code;	//市场		sz
 	@Column
 	private String name;	//市场名		上证
+	public String getCode() {
+		return code;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 }

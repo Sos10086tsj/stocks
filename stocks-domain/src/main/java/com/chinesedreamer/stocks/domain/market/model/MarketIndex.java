@@ -11,9 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /** 
  * Description: 股票指数
  * @author Paris Tao
@@ -23,7 +20,7 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "market_index")
-public @Getter @Setter class MarketIndex extends BaseEntity<Long>{
+public class MarketIndex extends BaseEntity<Long>{
 	/**
 	 * 
 	 */
@@ -52,4 +49,72 @@ public @Getter @Setter class MarketIndex extends BaseEntity<Long>{
 	private BigDecimal tradeNum;			//成交量		563990522.0
 	@Column(name = "trade_amount")
 	private BigDecimal tradeAmount;			//成交金额		974670611914.0
+	public Date getDate() {
+		return date;
+	}
+	public String getMarketCode() {
+		return marketCode;
+	}
+	public String getCode() {
+		return code;
+	}
+	public String getName() {
+		return name;
+	}
+	public BigDecimal getTodayOpenPrice() {
+		return todayOpenPrice;
+	}
+	public BigDecimal getYestodayClosePrice() {
+		return yestodayClosePrice;
+	}
+	public BigDecimal getNowPrice() {
+		return nowPrice;
+	}
+	public BigDecimal getMaxPrice() {
+		return maxPrice;
+	}
+	public BigDecimal getMinPrice() {
+		return minPrice;
+	}
+	public BigDecimal getTradeNum() {
+		return tradeNum;
+	}
+	public BigDecimal getTradeAmount() {
+		return tradeAmount;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	public void setMarketCode(String marketCode) {
+		this.marketCode = marketCode;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setTodayOpenPrice(BigDecimal todayOpenPrice) {
+		this.todayOpenPrice = todayOpenPrice;
+	}
+	public void setYestodayClosePrice(BigDecimal yestodayClosePrice) {
+		this.yestodayClosePrice = yestodayClosePrice;
+	}
+	public void setNowPrice(BigDecimal nowPrice) {
+		this.nowPrice = nowPrice;
+	}
+	public void setMaxPrice(BigDecimal maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+	public void setMinPrice(BigDecimal minPrice) {
+		this.minPrice = minPrice;
+	}
+	public void setTradeNum(BigDecimal tradeNum) {
+		this.tradeNum = tradeNum;
+	}
+	public void setTradeAmount(BigDecimal tradeAmount) {
+		this.tradeAmount = tradeAmount;
+	}
+	
+	
 }

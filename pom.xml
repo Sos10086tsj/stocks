@@ -407,10 +407,10 @@
 		</pluginManagement>
 	</build>
 	<modules>
-		<module>stocks-sync</module>
 		<module>stocks-domain</module>
-		<module>stocks-service</module>
-		<module>stocks-analyze</module>
 		<module>stocks-message</module>
+		<module>stocks-business</module>
+		<module>stocks-web</module>
+		<module>stocks-common</module>
 	</modules>
 </project>
