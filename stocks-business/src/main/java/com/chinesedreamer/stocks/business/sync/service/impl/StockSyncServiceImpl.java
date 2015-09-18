@@ -1,5 +1,6 @@
 package com.chinesedreamer.stocks.business.sync.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -28,11 +29,15 @@ public class StockSyncServiceImpl implements StockSyncService{
 	@Override
 	public void syncFocus(Long userId) throws Exception  {
 		//1. 获取用户关注的股票
-		List<UserFocus> userFocus = this.userFocusRepository.findByUserId(userId);
+		List<UserFocus> userFocuss = this.userFocusRepository.findByUserId(userId);
 		//2. 获取股票信息
-		String jsonResult = StockApiFactory.getInstance().getApiService(StockApiType.SHOWAPI).getApiResult(this.generateStocks(userFocus));
+		String jsonResult = StockApiFactory.getInstance().getApiService(StockApiType.SHOWAPI).getApiResult(this.generateStocks(userFocuss));
 		//3. 保存
-		List<StockIndex> sis = stockService.parseJsonResult(jsonResult);
+		List<String> marketCodes = new ArrayList<String>();
+		for (UserFocus userFocus : userFocuss) {
+			marketCodes.add(userFocus.getMarketCode());
+		}
+		List<StockIndex> sis = stockService.parseJsonResult(jsonResult,marketCodes);
 		for (StockIndex stockIndex : sis) {
 			this.stockIndexRepository.save(stockIndex);
 		}
@@ -41,7 +46,8 @@ public class StockSyncServiceImpl implements StockSyncService{
 	private String generateStocks(List<UserFocus> userFocus) {
 		StringBuffer stocksAppender = new StringBuffer("");
 		for (int i = 0; i < userFocus.size(); i++) {
-			stocksAppender.append(userFocus.get(i).getStockCode());
+			stocksAppender.append(userFocus.get(i).getMarketCode())
+			.append(userFocus.get(i).getStockCode());
 			if (i < userFocus.size() - 1) {
 				stocksAppender.append(",");
 			}

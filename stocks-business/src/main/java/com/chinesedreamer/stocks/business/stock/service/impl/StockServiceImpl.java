@@ -23,7 +23,7 @@ public class StockServiceImpl implements StockService{
 	private StockIndexRepository stockIndexRepository;
 
 	@Override
-	public List<StockIndex> parseJsonResult(String jsonResult) {
+	public List<StockIndex> parseJsonResult(String jsonResult, List<String> marketCodes) {
 		List<StockIndex> stockIndexs = new ArrayList<StockIndex>();
 		
 		JSONObject jsonObject = JSON.parseObject(jsonResult);
@@ -33,11 +33,11 @@ public class StockServiceImpl implements StockService{
 			throw new JsonParseException(jsonObject.getString("showapi_res_error"), jsonObject.getString("showapi_res_code"));
 		}
 		JSONArray stocks = jsonObject.getJSONArray("list");
-		for (Object object : stocks) {
-			JSONObject stock = (JSONObject)object;
+		for (int i = 0; i < stocks.size(); i++) {
+			JSONObject stock = (JSONObject)stocks.get(i);
 			String stockCode = stock.getString("code");
 			
-			StockIndex si = this.stockIndexRepository.findByDateAndStockCode(DateUtil.getTodayIntValue(), stockCode);
+			StockIndex si = this.stockIndexRepository.findByDateAndStockCodeAndMarketCode(DateUtil.getTodayIntValue(), stockCode,marketCodes.get(i));
 			if (null == si) {
 				si = new StockIndex();
 			}

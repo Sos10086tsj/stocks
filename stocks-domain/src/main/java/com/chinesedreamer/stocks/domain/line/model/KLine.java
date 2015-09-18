@@ -1,5 +1,9 @@
 package com.chinesedreamer.stocks.domain.line.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
 
 /** 
@@ -9,21 +13,29 @@ import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
  * @date 2015年9月12日 下午7:27:01 
  * Copyright:   Copyright (c)2015
  */
+@Entity
+@Table(name = "k_line")
 public class KLine extends BaseEntity<Long>{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6286941119445308634L;
 
-	private Long stockIndexId;	//股票指数ID	@link com.chinesedreamer.stocks.domain.stock.model.StockIndex.id
+	@Column(name = "stock_id")
+	private Long stockId;	//股票指数ID	@link com.chinesedreamer.stocks.domain.stock.model.StockIndex.id
 	
 	//url
+	@Column(name = "minute_url")
 	private String minuteUrl;	//分时线查询
+	@Column(name = "day_url")
 	private String dayUrl;		//日K线查询
+	@Column(name = "week_url")
 	private String weekUrl;		//周K线查询
+	@Column(name = "month_url")
 	private String monthUrl;	//月K线查询
-	public Long getStockIndexId() {
-		return stockIndexId;
+	
+	public Long getStockId() {
+		return stockId;
 	}
 	public String getMinuteUrl() {
 		return minuteUrl;
@@ -37,8 +49,8 @@ public class KLine extends BaseEntity<Long>{
 	public String getMonthUrl() {
 		return monthUrl;
 	}
-	public void setStockIndexId(Long stockIndexId) {
-		this.stockIndexId = stockIndexId;
+	public void setStockId(Long stockId) {
+		this.stockId = stockId;
 	}
 	public void setMinuteUrl(String minuteUrl) {
 		this.minuteUrl = minuteUrl;

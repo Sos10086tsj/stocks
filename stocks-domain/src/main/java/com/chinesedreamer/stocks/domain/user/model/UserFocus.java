@@ -18,6 +18,9 @@ public class UserFocus extends BaseEntity<Long>{
 	@Column(name = "user_id")
 	private Long userId;
 	
+	@Column(name = "market_code")
+	private String marketCode;
+	
 	@Column(name = "stock_code")
 	private String stockCode;
 
@@ -35,6 +38,14 @@ public class UserFocus extends BaseEntity<Long>{
 
 	public void setStockCode(String stockCode) {
 		this.stockCode = stockCode;
+	}
+
+	public String getMarketCode() {
+		return marketCode;
+	}
+
+	public void setMarketCode(String marketCode) {
+		this.marketCode = marketCode;
 	}
 	
 	

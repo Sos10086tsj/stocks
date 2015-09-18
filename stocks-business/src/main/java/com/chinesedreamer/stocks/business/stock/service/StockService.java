@@ -8,7 +8,8 @@ public interface StockService {
 	/**
 	 * 解析json
 	 * @param jsonResult
+	 * @param marketCodes
 	 * @return
 	 */
-	public List<StockIndex> parseJsonResult(String jsonResult);
+	public List<StockIndex> parseJsonResult(String jsonResult, List<String> marketCodes);
 }

@@ -2,6 +2,10 @@ package com.chinesedreamer.stocks.domain.stock.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
 
 /** 
@@ -11,6 +15,8 @@ import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
  * @date 2015年9月12日 下午6:47:20 
  * Copyright:   Copyright (c)2015
  */
+@Entity
+@Table(name = "stock_index")
 public class StockIndex extends BaseEntity<Long>{
 	/**
 	 * 
@@ -18,44 +24,77 @@ public class StockIndex extends BaseEntity<Long>{
 	private static final long serialVersionUID = -989477347242698561L;
 
 	//基本信息
+	@Column
 	private Integer date;					//日期
+	@Column(name = "market_code")
 	private String marketCode;			//市场		sz		@link com.chinesedreamer.stocks.domain.market.model.Market.code
+	@Column(name = "stock_code")
 	private String stockCode;			//股票编码		000002	@link com.chinesedreamer.stocks.domain.stock.model.Stock.code
+	@Column(name = "stock_name")
 	private String stockName;			//股票名称		@link com.chinesedreamer.stocks.domain.stock.model.Stock.name
 	
 	//价格信息
+	@Column(name = "open_price")
 	private BigDecimal openPrice;		//今日开盘价
+	@Column(name = "close_price")
 	private BigDecimal closePrice;		//昨日收盘价
+	@Column(name = "now_price")
 	private BigDecimal nowPrice;		//当前价格
+	@Column(name = "today_max")
 	private BigDecimal todayMax;		//今日最高价
+	@Column(name = "today_min")
 	private BigDecimal todayMin;		//今日最低价
+	@Column(name = "compet_buy_price")
 	private BigDecimal competBuyPrice;	//竞买价
+	@Column(name = "compet_sell_price")
 	private BigDecimal competSellPrice;	//竞卖价
 	
 	//成交信息
+	@Column(name = "trade_num")
 	private BigDecimal tradeNum;		//成交量
+	@Column(name = "trade_amount")
 	private BigDecimal tradeAmount;		//成交金额
 	
 	//购买信息
+	@Column(name = "buy_1_num")
 	private BigDecimal buy1Num;			//买一数量
+	@Column(name = "buy_1_price")
 	private BigDecimal buy1Price;		//买一报价
+	@Column(name = "buy_2_num")
 	private BigDecimal buy2Num;			//买二数量
+	@Column(name = "buy_2_price")
 	private BigDecimal buy2Price;		//买二报价
+	@Column(name = "buy_3_num")
 	private BigDecimal buy3Num;			//买三数量
+	@Column(name = "buy_3_price")
 	private BigDecimal buy3Price;		//买三报价
+	@Column(name = "buy_4_num")
 	private BigDecimal buy4Num;			//买四数量
+	@Column(name = "buy_4_price")
 	private BigDecimal buy4Price;		//买四报价
+	@Column(name = "buy_5_num")
 	private BigDecimal buy5Num;			//买五数量
+	@Column(name = "buy_5_price")
 	private BigDecimal buy5Price;		//买五报价
+	@Column(name = "sell_1_num")
 	private BigDecimal sell1Num;		//卖一数量
+	@Column(name ="sell_1_price")
 	private BigDecimal sell1Price;		//卖一报价
+	@Column(name = "sell_2_num")
 	private BigDecimal sell2Num;		//卖二数量
+	@Column(name = "sell_2_price")
 	private BigDecimal sell2Price;		//卖二报价
+	@Column(name = "sell_3_num")
 	private BigDecimal sell3Num;		//卖三数量
+	@Column(name = "sell_3_price")
 	private BigDecimal sell3Price;		//卖三报价
+	@Column(name = "sell_4_num")
 	private BigDecimal sell4Num;		//卖四数量
+	@Column(name = "sell_4_price")
 	private BigDecimal sell4Price;		//卖四报价
+	@Column(name = "sell_5_num")
 	private BigDecimal sell5Num;		//卖五数量
+	@Column(name = "sell_5_price")
 	private BigDecimal sell5Price;		//卖五报价
 	
 	public String getMarketCode() {
