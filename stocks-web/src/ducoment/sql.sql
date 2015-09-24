@@ -123,3 +123,8 @@ INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_A
 
 ALTER TABLE `stocks`.`stock_index` 
 CHANGE COLUMN `id` `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '' ;
+
+INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sh000001', '上证指数');
+INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sz399001', '深证成指');
+INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sz399005', '中小板指');
+INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sz399006', '创业板指');

@@ -12,17 +12,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.chinesedreamer.stocks.business.api.exception.JsonParseException;
 import com.chinesedreamer.stocks.business.market.service.MarketIndexService;
 import com.chinesedreamer.stocks.common.util.DateUtil;
+import com.chinesedreamer.stocks.domain.base.jpa.BaseServiceImpl;
 import com.chinesedreamer.stocks.domain.market.model.MarketIndex;
 import com.chinesedreamer.stocks.domain.market.repository.MarketIndexRepository;
 
 @Service
-public class MarketIndexServicImpl implements MarketIndexService{
+public class MarketIndexServicImpl extends BaseServiceImpl<MarketIndex, Long> implements MarketIndexService{
 	
 	@Resource
 	private MarketIndexRepository marketIndexRepository;
 
 	@Override
-	public void realTimeSyncMarketIndex(String jsonResult) throws Exception {
+	public void syncMarketIndex(String jsonResult) throws Exception {
 		JSONObject jsonObject = JSON.parseObject(jsonResult);
 		String showapiResCode = jsonObject.getString("showapi_res_code");
 		if (!showapiResCode.equals("0")) {
@@ -32,7 +33,7 @@ public class MarketIndexServicImpl implements MarketIndexService{
 		for (Object object : indexList) {
 			JSONObject index = (JSONObject)object;
 			String code = index.getString("code");
-			String marketCode = code.substring(0, 1);
+			String marketCode = code.substring(0, 2);
 			BigDecimal maxPrice = index.getBigDecimal("maxPrice");
 			BigDecimal minPrice = index.getBigDecimal("minPrice");
 			String name = index.getString("name");
