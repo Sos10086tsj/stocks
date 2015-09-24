@@ -94,3 +94,32 @@ CREATE TABLE `stocks`.`sys_config` (
 ALTER TABLE `stocks`.`sys_config` 
 ADD INDEX `INDX_SYS_CONFIG_PROP` (`property` ASC)  COMMENT '';
 
+CREATE TABLE `stocks`.`user` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '',
+  `username` VARCHAR(45) NULL COMMENT '',
+  `salt` VARCHAR(45) NULL COMMENT '',
+  `password` VARCHAR(45) NULL COMMENT '',
+  `name` VARCHAR(45) NULL COMMENT '',
+  PRIMARY KEY (`id`)  COMMENT '',
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC)  COMMENT '',
+  INDEX `IDX_USER_USERNAME` (`username` ASC)  COMMENT '');
+
+CREATE TABLE `stocks`.`user_focus` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '',
+  `user_id` BIGINT(20) NULL COMMENT '',
+  `market_code` VARCHAR(45) NULL COMMENT '',
+  `stock_code` VARCHAR(45) NULL COMMENT '',
+  PRIMARY KEY (`id`)  COMMENT '');
+
+ ALTER TABLE `stocks`.`market_index` 
+CHANGE COLUMN `date` `date` INT(11) NULL DEFAULT NULL COMMENT '' ;
+
+INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_API_ID', '8855');
+INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_API_SIGN', 'de775a2c637f4006b1327b13271c619d');
+INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_API_STOCK_BASE_URL', 'http://route.showapi.com/131-43');
+INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_API_BASE_STOCKS_URL', 'http://route.showapi.com/131-46');
+INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_API_STOCKS_NEED_INDEX', '0');
+INSERT INTO `stocks`.`sys_config` (`property`, `property_value`) VALUES ('SHOW_API_MARKET_INDEX_BASE_URL', 'http://route.showapi.com/131-45');
+
+ALTER TABLE `stocks`.`stock_index` 
+CHANGE COLUMN `id` `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '' ;

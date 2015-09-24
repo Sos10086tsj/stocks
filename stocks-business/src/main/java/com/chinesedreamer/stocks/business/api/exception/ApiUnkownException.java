@@ -1,13 +1,11 @@
-package com.chinesedreamer.stocks.business.sync.exception;
-
-import com.chinesedreamer.stocks.common.exception.BusinessException;
+package com.chinesedreamer.stocks.business.api.exception;
 
 /**
- * 
+ * 返回结果解析错误
  * @author Paris
  *
  */
-public class SyncException extends BusinessException{
+public class ApiUnkownException extends ApiException{
 	
 	/**
 	 * 
@@ -18,17 +16,17 @@ public class SyncException extends BusinessException{
 	
 	private String message;
 	
-	public SyncException(String message, Throwable cause){
+	public ApiUnkownException(String message, Throwable cause){
 		super(message, cause);
 		this.message = message;
 	}
 	
-	public SyncException(String message){
+	public ApiUnkownException(String message){
 		super(message);
 		this.message = message;
 	}
 	
-	public SyncException(String message, String code){
+	public ApiUnkownException(String message, String code){
 		super(message);
 		this.message = message;
 		this.code = code;

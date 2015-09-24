@@ -1,11 +1,13 @@
-package com.chinesedreamer.stocks.business.sync.exception;
+package com.chinesedreamer.stocks.business.api.exception;
+
+import com.chinesedreamer.stocks.common.exception.BusinessException;
 
 /**
- * 位置错误 
+ * 
  * @author Paris
  *
  */
-public class JsonParseException extends SyncException{
+public class ApiException extends BusinessException{
 	
 	/**
 	 * 
@@ -16,17 +18,17 @@ public class JsonParseException extends SyncException{
 	
 	private String message;
 	
-	public JsonParseException(String message, Throwable cause){
+	public ApiException(String message, Throwable cause){
 		super(message, cause);
 		this.message = message;
 	}
 	
-	public JsonParseException(String message){
+	public ApiException(String message){
 		super(message);
 		this.message = message;
 	}
 	
-	public JsonParseException(String message, String code){
+	public ApiException(String message, String code){
 		super(message);
 		this.message = message;
 		this.code = code;

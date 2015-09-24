@@ -1,15 +1,20 @@
 package com.chinesedreamer.stocks.business.stock.service;
 
-import java.util.List;
+import com.chinesedreamer.stocks.domain.base.jpa.BaseService;
+import com.chinesedreamer.stocks.domain.stock.model.Stock;
 
-import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
-
-public interface StockService {
+public interface StockService extends BaseService<Stock, Long>{
 	/**
-	 * 解析json
+	 * 同步上市公司信息
 	 * @param jsonResult
-	 * @param marketCodes
+	 */
+	public void syncStockIndex(String jsonResult);
+	
+	/**
+	 * 根据市场和股票代码查询上市公司信息
+	 * @param marketCode
+	 * @param code
 	 * @return
 	 */
-	public List<StockIndex> parseJsonResult(String jsonResult, List<String> marketCodes);
+	public Stock findByMarketCodeAndCode(String marketCode, String code);
 }

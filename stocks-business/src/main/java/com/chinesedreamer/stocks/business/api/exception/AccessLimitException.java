@@ -1,11 +1,11 @@
-package com.chinesedreamer.stocks.business.sync.exception;
+package com.chinesedreamer.stocks.business.api.exception;
 
 /**
  * 访问达到上限
  * @author Paris
  *
  */
-public class AccessLimitException extends SyncException{
+public class AccessLimitException extends ApiException{
 	
 	/**
 	 * 

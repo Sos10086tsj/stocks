@@ -1,11 +1,11 @@
-package com.chinesedreamer.stocks.business.sync.exception;
+package com.chinesedreamer.stocks.business.api.exception;
 
 /**
- * 返回结果解析错误
+ * 同步任务连接失败错误
  * @author Paris
  *
  */
-public class SyncUnkownException extends SyncException{
+public class ConnectFailedException extends ApiException{
 	
 	/**
 	 * 
@@ -16,17 +16,17 @@ public class SyncUnkownException extends SyncException{
 	
 	private String message;
 	
-	public SyncUnkownException(String message, Throwable cause){
+	public ConnectFailedException(String message, Throwable cause){
 		super(message, cause);
 		this.message = message;
 	}
 	
-	public SyncUnkownException(String message){
+	public ConnectFailedException(String message){
 		super(message);
 		this.message = message;
 	}
 	
-	public SyncUnkownException(String message, String code){
+	public ConnectFailedException(String message, String code){
 		super(message);
 		this.message = message;
 		this.code = code;

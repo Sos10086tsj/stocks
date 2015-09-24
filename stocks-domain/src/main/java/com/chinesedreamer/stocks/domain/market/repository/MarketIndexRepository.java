@@ -11,5 +11,5 @@ import com.chinesedreamer.stocks.domain.market.model.MarketIndex;
  * Copyright:   Copyright (c)2015
  */
 public interface MarketIndexRepository extends BaseRepository<MarketIndex, Long>{
-
+	public MarketIndex findByDateAndCode(Integer date, String code);
 }

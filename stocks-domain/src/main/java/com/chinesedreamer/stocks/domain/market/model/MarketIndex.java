@@ -1,7 +1,6 @@
 package com.chinesedreamer.stocks.domain.market.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +27,7 @@ public class MarketIndex extends BaseEntity<Long>{
 
 	@Column(name = "date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date date;						//日期
+	private Integer date;						//日期
 	@Column(name = "market_code")
 	private String marketCode;				//市场		sz		@link com.chinesedreamer.stocks.domain.market.model.Market.code
 	@Column
@@ -49,7 +48,7 @@ public class MarketIndex extends BaseEntity<Long>{
 	private BigDecimal tradeNum;			//成交量		563990522.0
 	@Column(name = "trade_amount")
 	private BigDecimal tradeAmount;			//成交金额		974670611914.0
-	public Date getDate() {
+	public Integer getDate() {
 		return date;
 	}
 	public String getMarketCode() {
@@ -82,7 +81,7 @@ public class MarketIndex extends BaseEntity<Long>{
 	public BigDecimal getTradeAmount() {
 		return tradeAmount;
 	}
-	public void setDate(Date date) {
+	public void setDate(Integer date) {
 		this.date = date;
 	}
 	public void setMarketCode(String marketCode) {

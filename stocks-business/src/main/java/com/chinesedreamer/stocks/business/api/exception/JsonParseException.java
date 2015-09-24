@@ -1,11 +1,11 @@
-package com.chinesedreamer.stocks.business.sync.exception;
+package com.chinesedreamer.stocks.business.api.exception;
 
 /**
- * 同步任务连接失败错误
+ * 位置错误 
  * @author Paris
  *
  */
-public class ConnectFailedException extends SyncException{
+public class JsonParseException extends ApiException{
 	
 	/**
 	 * 
@@ -16,17 +16,17 @@ public class ConnectFailedException extends SyncException{
 	
 	private String message;
 	
-	public ConnectFailedException(String message, Throwable cause){
+	public JsonParseException(String message, Throwable cause){
 		super(message, cause);
 		this.message = message;
 	}
 	
-	public ConnectFailedException(String message){
+	public JsonParseException(String message){
 		super(message);
 		this.message = message;
 	}
 	
-	public ConnectFailedException(String message, String code){
+	public JsonParseException(String message, String code){
 		super(message);
 		this.message = message;
 		this.code = code;

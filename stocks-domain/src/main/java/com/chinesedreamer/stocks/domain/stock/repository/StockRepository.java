@@ -11,5 +11,5 @@ import com.chinesedreamer.stocks.domain.stock.model.Stock;
  * Copyright:   Copyright (c)2015
  */
 public interface StockRepository extends BaseRepository<Stock, Long>{
-
+	public Stock findByMarketCodeAndCode(String marketCode, String code);
 }
