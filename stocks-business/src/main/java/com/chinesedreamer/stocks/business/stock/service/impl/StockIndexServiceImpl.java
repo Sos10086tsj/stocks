@@ -1,7 +1,5 @@
 package com.chinesedreamer.stocks.business.stock.service.impl;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -23,7 +21,7 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 	private StockIndexRepository stockIndexRepository;
 
 	@Override
-	public void syncStockIndex(String jsonResult, List<String> marketCodes) {
+	public void syncStockIndex(String jsonResult) {
 		
 		JSONObject jsonObject = JSON.parseObject(jsonResult);
 		
@@ -36,12 +34,12 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 			JSONObject stockIndex = (JSONObject)stockIndexs.get(i);
 			String stockCode = stockIndex.getString("code");
 			
-			StockIndex si = this.stockIndexRepository.findByDateAndStockCodeAndMarketCode(DateUtil.getTodayIntValue(), stockCode,marketCodes.get(i));
+			StockIndex si = this.stockIndexRepository.findByDateAndStockCode(DateUtil.getTodayIntValue(), stockCode);
 			if (null == si) {
 				si = new StockIndex();
 			}
 			si.setStockCode(stockCode);
-			si.setMarketCode(marketCodes.get(i));
+			//si.setMarketCode(marketCodes.get(i));
 			si.setStockName(stockIndex.getString("name"));
 			si.setOpenPrice(stockIndex.getBigDecimal("openPrice"));
 			si.setClosePrice(stockIndex.getBigDecimal("closePrice"));
@@ -79,8 +77,8 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 	}
 
 	@Override
-	public StockIndex findByDateAndStockCodeAndMarketCode(Integer date, String stockCode, String marketCode) {
-		return this.stockIndexRepository.findByDateAndStockCodeAndMarketCode(date, stockCode, marketCode);
+	public StockIndex findByDateAndStockCode(Integer date, String stockCode) {
+		return this.stockIndexRepository.findByDateAndStockCode(date, stockCode);
 	}
 
 }

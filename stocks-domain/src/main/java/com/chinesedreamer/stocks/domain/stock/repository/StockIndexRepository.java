@@ -11,5 +11,5 @@ import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
  * Copyright:   Copyright (c)2015
  */
 public interface StockIndexRepository extends BaseRepository<StockIndex, Long>{
-	public StockIndex findByDateAndStockCodeAndMarketCode(Integer date, String stockCode, String marketCode);
+	public StockIndex findByDateAndStockCode(Integer date, String stockCode);
 }

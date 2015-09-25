@@ -66,5 +66,9 @@ public class BaseServiceImpl<M extends AbstractEntity<?>, ID extends Serializabl
 		};
 		return condition;
 	}
+	@Override
+	public List<M> findAll() {
+		return this.baseRepository.findAll();
+	}
 
 }

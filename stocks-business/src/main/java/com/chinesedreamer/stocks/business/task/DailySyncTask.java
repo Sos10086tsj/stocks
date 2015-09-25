@@ -1,5 +1,7 @@
 package com.chinesedreamer.stocks.business.task;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.chinesedreamer.stocks.business.api.service.ApiService;
 import com.chinesedreamer.stocks.business.market.service.MarketIndexService;
+import com.chinesedreamer.stocks.business.stock.service.StockService;
+import com.chinesedreamer.stocks.domain.stock.model.Stock;
 
 /**
  * 每日股票信息同步
@@ -23,6 +27,8 @@ public class DailySyncTask {
 	private ApiService apiService;
 	@Resource
 	private MarketIndexService marketIndexService;
+	@Resource
+	private StockService stockService;
 	
 	
 	/**
@@ -42,13 +48,14 @@ public class DailySyncTask {
 	 */
 	@Scheduled(cron = "0 15 16 * * ?")
 	public void syncStocks() {
+		List<Stock> stocks = this.stockService.findAll();
 		
 	}
 	
 	/**
 	 * 同步锁有股指数信息
 	 */
-	@Scheduled(cron = "0 0 17 * * ?")
+	@Scheduled(cron = "0 0 21 * * ?")
 	public void syncStocksIndex(){
 		
 	}

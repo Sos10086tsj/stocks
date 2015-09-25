@@ -1,6 +1,7 @@
 package com.chinesedreamer.stocks.domain.base.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Root;
@@ -53,6 +54,12 @@ public interface BaseService<M extends AbstractEntity<?>, ID extends Serializabl
 	 * @return 实体总数
 	 */
 	public long count();
+	
+	/**
+	 * 查找所有
+	 * @return
+	 */
+	public List<M> findAll();
 
 	/**
 	 * @param entity
