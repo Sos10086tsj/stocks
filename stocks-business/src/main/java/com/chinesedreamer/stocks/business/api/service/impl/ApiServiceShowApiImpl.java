@@ -1,5 +1,8 @@
 package com.chinesedreamer.stocks.business.api.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -122,6 +125,52 @@ public class ApiServiceShowApiImpl implements ApiService{
 				+ "&showapi_timestamp=" + showApiTimestamp
 				+ "&showapi_sign=" + showapiSign
 				+ paramBuffer.toString();
+		logger.info("showapi access url:{}", url);
+		return url;
+	}
+
+	@Override
+	public String getStockIndexScopeApiReust(String code, Date startDate, Date endDate) throws Exception {
+		String url = this.generateStocksScopeShowApiUrl(code,startDate,endDate);
+		return HttpClientUtil.sendPost(url, "utf-8");
+	}
+	
+	
+	/**
+	 * 封装股票时间段查询url
+	 * @param code
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	private String generateStocksScopeShowApiUrl(String code, Date startDate, Date endDate) {
+		String baseUrl = sysConfigRepository.findByProperty(SysconfigConstant.PROPERTY_SHOW_API_STOCK_SCOPE_BASE_URL).getPropertyValue();
+		String showapiId = sysConfigRepository.findByProperty(SysconfigConstant.PROPERTY_SHOW_API_ID).getPropertyValue();
+		String showApiTimestamp = DateUtil.getFormatTime("yyyyMMddHHmmss");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String begin = format.format(startDate);
+		String end = format.format(endDate);
+		StringBuffer sign = new StringBuffer();
+		sign.append("begin")
+		.append(begin)
+		.append("code")
+		.append(code)
+		.append("end")
+		.append(end)
+		.append("showapi_appid")
+		.append(showapiId)
+		.append("showapi_timestamp")
+		.append(showApiTimestamp)
+		.append(sysConfigRepository.findByProperty(SysconfigConstant.PROPERTY_SHOW_API_SIGN).getPropertyValue());
+		String showapiSign = EncryptionUtil.md5L32(sign.toString());
+		
+		String url = baseUrl + "?" 
+				+ "showapi_appid=" + showapiId 
+				+ "&showapi_timestamp=" + showApiTimestamp
+				+ "&showapi_sign=" + showapiSign
+				+ "&begin=" + begin
+				+ "&end=" + end
+				+ "&code=" + code;
 		logger.info("showapi access url:{}", url);
 		return url;
 	}

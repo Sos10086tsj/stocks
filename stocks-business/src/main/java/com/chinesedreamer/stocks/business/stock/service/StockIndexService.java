@@ -11,6 +11,12 @@ public interface StockIndexService extends BaseService<StockIndex, Long>{
 	 */
 	public void syncStockIndex(String jsonResult);
 	
+	/**
+	 * 同步时间段内股票指数信息
+	 * @param jsonResult
+	 */
+	public void syncStockIndexScope(String jsonResult);
+	
 	
 	/**
 	 * 查询某日股票信息
@@ -19,4 +25,6 @@ public interface StockIndexService extends BaseService<StockIndex, Long>{
 	 * @return
 	 */
 	public StockIndex findByDateAndStockCode(Integer date, String stockCode);
+	
+	
 }

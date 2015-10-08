@@ -1,5 +1,7 @@
 package com.chinesedreamer.stocks.business.api.service;
 
+import java.util.Date;
+
 /**
  * 股票远程获取服务
  * @author Paris
@@ -29,4 +31,14 @@ public interface ApiService {
 	 * @throws Exception
 	 */
 	public String getStockApiResult(String code, String name) throws Exception;
+	
+	/**
+	 * 获取股票某个时间段内的数据
+	 * @param code
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 * @throws Exception
+	 */
+	public String getStockIndexScopeApiReust(String code, Date startDate, Date endDate) throws Exception;
 }

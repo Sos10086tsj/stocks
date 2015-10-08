@@ -2,8 +2,7 @@ package com.chinesedreamer.stocks.business.stock.service.impl;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -34,14 +33,24 @@ public class StockIndexServiceImplTest extends BaseTest{
 	@Rollback(value = false)
 	public void testRealTimeSyncStockIndex(){
 		try {
-			List<String> marketCodes = new ArrayList<String>();
-			marketCodes.add("sz");
-			marketCodes.add("sz");
-			String jsonResult = this.stockApiServiceShowApiService.getStocksApiResult("sz002024,sz000651");
-			this.stockIndexService.syncStockIndex(jsonResult, marketCodes);
-			StockIndex stockIndex = this.stockIndexService.findByDateAndStockCodeAndMarketCode(20150924, "002024", "sz");
+			String jsonResult = this.stockApiServiceShowApiService.getStocksApiResult("sz000930,sz000616,sh600811");
+			this.stockIndexService.syncStockIndex(jsonResult);
+			StockIndex stockIndex = this.stockIndexService.findByDateAndStockCode(20151008, "000930");
 			assertNotNull(stockIndex);
 			System.out.println(stockIndex.getCompetBuyPrice());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	@Rollback(value = false)
+	public void testSyncStockIndexScope(){
+		try {
+			Date startDate = new Date(115, 8, 1);
+			Date endDate = new Date(115,8,2);
+			String jsonResult = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("000930", startDate, endDate);
+			this.stockIndexService.syncStockIndexScope(jsonResult);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

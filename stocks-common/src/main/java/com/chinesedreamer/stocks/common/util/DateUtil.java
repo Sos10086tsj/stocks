@@ -25,4 +25,5 @@ public class DateUtil {
 		SimpleDateFormat format = new SimpleDateFormat(formatStr);
 		return format.format(date);
 	}
+	
 }

@@ -39,7 +39,7 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 				si = new StockIndex();
 			}
 			si.setStockCode(stockCode);
-			//si.setMarketCode(marketCodes.get(i));
+			si.setMarketCode(stockIndex.getString("market"));
 			si.setStockName(stockIndex.getString("name"));
 			si.setOpenPrice(stockIndex.getBigDecimal("openPrice"));
 			si.setClosePrice(stockIndex.getBigDecimal("closePrice"));
@@ -79,6 +79,40 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 	@Override
 	public StockIndex findByDateAndStockCode(Integer date, String stockCode) {
 		return this.stockIndexRepository.findByDateAndStockCode(date, stockCode);
+	}
+
+	@Override
+	public void syncStockIndexScope(String jsonResult) {
+		JSONObject jsonObject = JSON.parseObject(jsonResult);
+		
+		String showapiResCode = jsonObject.getString("showapi_res_code");
+		if (!showapiResCode.equals("0")) {
+			throw new JsonParseException(jsonObject.getString("showapi_res_error"), jsonObject.getString("showapi_res_code"));
+		}
+		JSONArray stockIndexs = jsonObject.getJSONObject("showapi_res_body").getJSONArray("list");
+		
+		for (Object obj : stockIndexs) {
+			JSONObject stockIndex = (JSONObject)obj;
+			String stockCode = stockIndex.getString("code");
+			String dateStr = stockIndex.getString("date").replace("-", "");
+			Integer dateInt = Integer.parseInt(dateStr);
+			StockIndex si = this.stockIndexRepository.findByDateAndStockCode(dateInt, stockCode);
+			if (null == si) {
+				si = new StockIndex();
+			}
+			si.setClosePrice(stockIndex.getBigDecimal("closePrice"));
+			si.setStockCode(stockCode);
+			
+			si.setDate(dateInt);
+			si.setMarketCode(stockIndex.getString("market"));
+			si.setTodayMax(stockIndex.getBigDecimal("today_max"));
+			si.setTodayMin(stockIndex.getBigDecimal("today_min"));
+			si.setOpenPrice(stockIndex.getBigDecimal("open_price"));
+			si.setStockName(stockIndex.getString("stockName"));
+			si.setTradeNum(stockIndex.getBigDecimal("trade_num"));
+			si.setTradeAmount(stockIndex.getBigDecimal("trade_money"));
+			this.stockIndexRepository.save(si);
+		}
 	}
 
 }

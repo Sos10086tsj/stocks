@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 
 import com.chinesedreamer.stocks.business.api.service.ApiService;
 import com.chinesedreamer.stocks.business.market.service.MarketIndexService;
-import com.chinesedreamer.stocks.business.stock.service.StockService;
-import com.chinesedreamer.stocks.domain.stock.model.Stock;
+import com.chinesedreamer.stocks.business.stock.service.StockIndexService;
+import com.chinesedreamer.stocks.business.user.service.UserFocusService;
+import com.chinesedreamer.stocks.domain.user.model.UserFocus;
 
 /**
  * 每日股票信息同步
@@ -28,7 +29,9 @@ public class DailySyncTask {
 	@Resource
 	private MarketIndexService marketIndexService;
 	@Resource
-	private StockService stockService;
+	private StockIndexService stockIndexService;
+	@Resource
+	private UserFocusService userFocusService;
 	
 	
 	/**
@@ -44,19 +47,27 @@ public class DailySyncTask {
 	}
 	
 	/**
-	 * 同步所有股票信息
+	 * 同步关注的股票指数信息
 	 */
-	@Scheduled(cron = "0 15 16 * * ?")
-	public void syncStocks() {
-		List<Stock> stocks = this.stockService.findAll();
-		
+	@Scheduled(cron = "0 5 16 * * ?")
+	public void syncStocksIndex() {
+		List<UserFocus> ufs = this.userFocusService.findAll();
+		StringBuffer buffer = new StringBuffer();
+		for (UserFocus uf : ufs) {
+			buffer.append(uf.getMarketCode().toLowerCase())
+			.append(",")
+			.append(uf.getStockCode())
+			.append(",");
+		}
+		String stocks = buffer.toString();
+		if (stocks.endsWith(",")) {
+			stocks = stocks.substring(0, stocks.length() - 1);
+		}
+		try {
+			this.stockIndexService.syncStockIndex(this.apiService.getStocksApiResult(stocks));
+		} catch (Exception e) {
+			logger.error("", e);
+		}
 	}
-	
-	/**
-	 * 同步锁有股指数信息
-	 */
-	@Scheduled(cron = "0 0 21 * * ?")
-	public void syncStocksIndex(){
-		
-	}
+
 }
