@@ -10,12 +10,16 @@ import com.chinesedreamer.stocks.domain.line.constant.KDJType;
  *
  */
 public class KDJ {
+	private Integer date;
+	private KDJType type;
+	private String stockCode;
+	
 	private BigDecimal k;
 	private BigDecimal d;
 	private BigDecimal j;
+	private BigDecimal rsv;//即未成熟随机值（Raw Stochastic Value
 	
-	private Integer date;
-	private KDJType type;
+	
 	
 	public BigDecimal getK() {
 		return k;
@@ -46,6 +50,18 @@ public class KDJ {
 	}
 	public void setType(KDJType type) {
 		this.type = type;
+	}
+	public BigDecimal getRsv() {
+		return rsv;
+	}
+	public void setRsv(BigDecimal rsv) {
+		this.rsv = rsv;
+	}
+	public String getStockCode() {
+		return stockCode;
+	}
+	public void setStockCode(String stockCode) {
+		this.stockCode = stockCode;
 	}
 	
 	

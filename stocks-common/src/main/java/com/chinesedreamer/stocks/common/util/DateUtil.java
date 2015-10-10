@@ -26,4 +26,12 @@ public class DateUtil {
 		return format.format(date);
 	}
 	
+	public static String getFormatTime(String formatStr,Date date) {
+		if (StringUtils.isEmpty(formatStr)) {
+			formatStr = "yyyyMMddHHmmss";
+		}
+		SimpleDateFormat format = new SimpleDateFormat(formatStr);
+		return format.format(date);
+	}
+	
 }
