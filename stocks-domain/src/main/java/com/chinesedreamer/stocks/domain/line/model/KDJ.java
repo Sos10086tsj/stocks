@@ -2,6 +2,10 @@ package com.chinesedreamer.stocks.domain.line.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
 import com.chinesedreamer.stocks.domain.line.constant.KDJType;
 
 /**
@@ -9,7 +13,14 @@ import com.chinesedreamer.stocks.domain.line.constant.KDJType;
  * @author Paris
  *
  */
-public class KDJ {
+@Entity
+@Table(name = "dkj")
+public class KDJ extends BaseEntity<Long>{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7849509605924448026L;
+	
 	private Integer date;
 	private KDJType type;
 	private String stockCode;

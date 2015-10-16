@@ -128,3 +128,14 @@ INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sh000001', '上证指数
 INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sz399001', '深证成指');
 INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sz399005', '中小板指');
 INSERT INTO `stocks`.`market` (`code`, `name`) VALUES ('sz399006', '创业板指');
+
+CREATE TABLE `stocks`.`kdj` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '',
+  `date` INT(6) NULL COMMENT '',
+  `type` INT NULL COMMENT '',
+  `stock_code` VARCHAR(45) NULL COMMENT '',
+  `k` DECIMAL(4,2) NULL COMMENT '',
+  `d` DECIMAL(4,2) NULL COMMENT '',
+  `j` DECIMAL(4,2) NULL COMMENT '',
+  `rsv` DECIMAL(4,2) NULL COMMENT '',
+  PRIMARY KEY (`id`)  COMMENT '');

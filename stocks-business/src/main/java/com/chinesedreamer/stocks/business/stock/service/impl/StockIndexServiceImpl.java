@@ -100,13 +100,13 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 			if (null == si) {
 				si = new StockIndex();
 			}
-			si.setClosePrice(stockIndex.getBigDecimal("closePrice"));
+			si.setClosePrice(stockIndex.getBigDecimal("close_price"));
 			si.setStockCode(stockCode);
 			
 			si.setDate(dateInt);
 			si.setMarketCode(stockIndex.getString("market"));
-			si.setTodayMax(stockIndex.getBigDecimal("today_max"));
-			si.setTodayMin(stockIndex.getBigDecimal("today_min"));
+			si.setTodayMax(stockIndex.getBigDecimal("max_price"));
+			si.setTodayMin(stockIndex.getBigDecimal("min_price"));
 			si.setOpenPrice(stockIndex.getBigDecimal("open_price"));
 			si.setStockName(stockIndex.getString("stockName"));
 			si.setTradeNum(stockIndex.getBigDecimal("trade_num"));

@@ -48,9 +48,12 @@ public class StockIndexServiceImplTest extends BaseTest{
 	public void testSyncStockIndexScope(){
 		try {
 			Date startDate = new Date(115, 8, 1);
-			Date endDate = new Date(115,8,2);
-			String jsonResult = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("000930", startDate, endDate);
+			Date endDate = new Date(115,8,30);
+			String jsonResult = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("600655", startDate, endDate);
 			this.stockIndexService.syncStockIndexScope(jsonResult);
+			
+			String jsonResult2 = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("600169", startDate, endDate);
+			this.stockIndexService.syncStockIndexScope(jsonResult2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

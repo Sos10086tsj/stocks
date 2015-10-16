@@ -12,4 +12,5 @@ import com.chinesedreamer.stocks.domain.stock.model.Stock;
  */
 public interface StockRepository extends BaseRepository<Stock, Long>{
 	public Stock findByMarketCodeAndCode(String marketCode, String code);
+	public Stock findByCode(String code);
 }
