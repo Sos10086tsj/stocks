@@ -13,19 +13,10 @@
           http://www.springframework.org/schema/task/spring-task-3.1.xsd   
           ">
 
-<!-- 静态资源读取 -->
-<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:datasource.properties</value>
-			</list>
-		</property>
-	</bean>
-	
-	<!-- datasource 配置 -->
-	<import resource="datasource.xml"/>
-	<!-- spring 配置 -->
-
+	<context:component-scan base-package="com.chinesedreamer.stocks.*">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<context:annotation-config />
 	
 </beans>
