@@ -56,5 +56,16 @@ stocks.loginItem = {
 			}
 		});
 		return loginBtn;
+	},
+	
+	//注册按钮
+	initRegisterBtn : function(){
+		var registerBtn = new Ext.Button({
+			text: stocks.loginLabel.registerText,
+			handler: function(){
+				window.open("register");
+			}
+		});
+		return registerBtn;
 	}
 };

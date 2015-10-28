@@ -10,5 +10,7 @@ stocks.loginLabel = {
 	
 	loginText : '登陆',
 	
+	registerText : '注册新用户',
+	
 	waitingMsg : '登陆中...'
 };

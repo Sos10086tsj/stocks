@@ -210,6 +210,13 @@
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 		</dependency>
+		
+		<!-- stocks modules -->
+		<dependency>
+			<groupId>com.chinesedreamer</groupId>
+			<artifactId>stocks-business</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<!-- profile 配置 -->

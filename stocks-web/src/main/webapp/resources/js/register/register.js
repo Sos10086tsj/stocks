@@ -1,7 +1,7 @@
-stocks.login = {
-	loginForm : null,
+stocks.register = {
+	registerForm : null,
 	
-	initLoginPanel : function(){
+	initRegisterPanel : function(){
 		var height = $(window).height();
 		var width = $(window).width();
 		var marginLeft = (width - 250) / 2;
@@ -15,15 +15,15 @@ stocks.login = {
 		
 		var margin = marginTop + ' auto auto ' + marginLeft;
 		
-		stocks.login.loginForm = Ext.create("Ext.form.Panel",{
-			title : '<font style="font-size: 18px;">' + stocks.loginLabel.panelTitleLabel + '</font>',
+		stocks.register.registerForm = Ext.create("Ext.form.Panel",{
+			title : '<font style="font-size: 18px;">' + stocks.registerLabel.panelTitleLabel + '</font>',
 			frame : true,
 			buttonAlign: 'center',
 			width : 250,
 			minWidth : 250,
-			height : 150,
+			height : 250,
 			minHeight : 150,
-			renderTo : 'login_panel',
+			renderTo : 'register_panel',
 			layout : {
 				type : 'vbox',
 				padding : '5',
@@ -32,12 +32,13 @@ stocks.login = {
 			},
 			margin : margin,
 			items : [
-				stocks.loginItem.initUsername(),
-				stocks.loginItem.initPassword()
+				stocks.registerItem.initUsername(),
+				stocks.registerItem.initPassword(),
+				stocks.registerItem.initConfirmPassword(),
+				stocks.registerItem.initInvitationCode()
 			],
 			buttons : [
-				stocks.loginItem.initLoginBtn(),
-				stocks.loginItem.initRegisterBtn(),
+				stocks.registerItem.initRegisterBtn()
 			]
 		});
 	}
@@ -46,6 +47,6 @@ stocks.login = {
 $(function(){
 	Ext.onReady(function () {
 		Ext.QuickTips.init();
-		stocks.login.initLoginPanel();
+		stocks.register.initRegisterPanel();
 	}); 
 });

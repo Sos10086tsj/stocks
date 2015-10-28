@@ -43,4 +43,21 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 		//TODO 保存session
 	}
 
+	@Override
+	public void register(String username, String password) throws UserLoginException {
+		if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+			throw new UserPassIllegal(UserException.USER_PASS_ILLEGAL + " " + UserException.USER_PASS_ILLEGAL.getMessage() + " user:" + username + " password:" + password);
+		}
+		User user = this.userRepository.findByUsername(username);
+		if (null == user) {
+			throw new UserNotExistException(UserException.USER_NOT_EXIST + " " + UserException.USER_NOT_EXIST.getMessage() + " user:" + username);
+		}
+		user = new User();
+		user.setUsername(username);
+		String salt = EncryptionUtil.generateSalt(6);
+		user.setSalt(salt);
+		user.setPassword(EncryptionUtil.md5L32(user.getPassword() + salt));
+		this.save(user);
+	}
+
 }

@@ -14,4 +14,12 @@ public interface UserService extends BaseService<User, Long>{
 	 * @return
 	 */
 	public void login(String username, String password, Integer source)  throws UserLoginException;
+	
+	/**
+	 * 用户注册
+	 * @param username
+	 * @param password
+	 * @throws UserLoginException
+	 */
+	public void register(String username, String password) throws UserLoginException;
 }

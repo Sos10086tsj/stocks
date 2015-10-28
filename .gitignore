@@ -82,3 +82,7 @@ stocks-web/.settings/org.eclipse.wst.common.project.facet.core.xml
 stocks-web/.settings/org.eclipse.wst.jsdt.ui.superType.container
 stocks-web/.settings/org.eclipse.wst.jsdt.ui.superType.name
 stocks-web/.settings/org.eclipse.wst.validation.prefs
+stocks-business/.settings/org.eclipse.wst.common.component
+stocks-business/.settings/org.eclipse.wst.common.project.facet.core.xml
+stocks-common/.settings/org.eclipse.wst.common.component
+stocks-common/.settings/org.eclipse.wst.common.project.facet.core.xml
