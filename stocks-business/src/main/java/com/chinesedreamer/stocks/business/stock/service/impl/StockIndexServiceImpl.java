@@ -8,17 +8,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chinesedreamer.stocks.business.api.exception.JsonParseException;
+import com.chinesedreamer.stocks.business.stock.logic.StockIndexLogic;
 import com.chinesedreamer.stocks.business.stock.service.StockIndexService;
 import com.chinesedreamer.stocks.common.util.DateUtil;
-import com.chinesedreamer.stocks.domain.base.jpa.BaseServiceImpl;
 import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
-import com.chinesedreamer.stocks.domain.stock.repository.StockIndexRepository;
 
 @Service
-public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> implements StockIndexService{
+public class StockIndexServiceImpl implements StockIndexService{
 	
 	@Resource
-	private StockIndexRepository stockIndexRepository;
+	private StockIndexLogic logic;
 
 	@Override
 	public void syncStockIndex(String jsonResult) {
@@ -34,7 +33,7 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 			JSONObject stockIndex = (JSONObject)stockIndexs.get(i);
 			String stockCode = stockIndex.getString("code");
 			
-			StockIndex si = this.stockIndexRepository.findByDateAndStockCode(DateUtil.getTodayIntValue(), stockCode);
+			StockIndex si = this.logic.findByDateAndStockCode(DateUtil.getTodayIntValue(), stockCode);
 			if (null == si) {
 				si = new StockIndex();
 			}
@@ -72,13 +71,13 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 			si.setSell5Price(stockIndex.getBigDecimal("sell5_m"));
 			String dateStr = stockIndex.getString("date").replace("-", "");
 			si.setDate(Integer.valueOf(dateStr));
-			this.stockIndexRepository.save(si);
+			this.logic.save(si);
 		}
 	}
 
 	@Override
 	public StockIndex findByDateAndStockCode(Integer date, String stockCode) {
-		return this.stockIndexRepository.findByDateAndStockCode(date, stockCode);
+		return this.logic.findByDateAndStockCode(date, stockCode);
 	}
 
 	@Override
@@ -96,7 +95,7 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 			String stockCode = stockIndex.getString("code");
 			String dateStr = stockIndex.getString("date").replace("-", "");
 			Integer dateInt = Integer.parseInt(dateStr);
-			StockIndex si = this.stockIndexRepository.findByDateAndStockCode(dateInt, stockCode);
+			StockIndex si = this.logic.findByDateAndStockCode(dateInt, stockCode);
 			if (null == si) {
 				si = new StockIndex();
 			}
@@ -111,7 +110,7 @@ public class StockIndexServiceImpl extends BaseServiceImpl<StockIndex, Long> imp
 			si.setStockName(stockIndex.getString("stockName"));
 			si.setTradeNum(stockIndex.getBigDecimal("trade_num"));
 			si.setTradeAmount(stockIndex.getBigDecimal("trade_money"));
-			this.stockIndexRepository.save(si);
+			this.logic.save(si);
 		}
 	}
 

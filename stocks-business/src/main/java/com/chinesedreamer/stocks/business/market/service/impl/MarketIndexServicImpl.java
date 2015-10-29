@@ -10,17 +10,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chinesedreamer.stocks.business.api.exception.JsonParseException;
+import com.chinesedreamer.stocks.business.market.logic.MarketIndexLogic;
 import com.chinesedreamer.stocks.business.market.service.MarketIndexService;
 import com.chinesedreamer.stocks.common.util.DateUtil;
-import com.chinesedreamer.stocks.domain.base.jpa.BaseServiceImpl;
 import com.chinesedreamer.stocks.domain.market.model.MarketIndex;
-import com.chinesedreamer.stocks.domain.market.repository.MarketIndexRepository;
 
 @Service
-public class MarketIndexServicImpl extends BaseServiceImpl<MarketIndex, Long> implements MarketIndexService{
+public class MarketIndexServicImpl implements MarketIndexService{
 	
 	@Resource
-	private MarketIndexRepository marketIndexRepository;
+	private MarketIndexLogic logic;
 
 	@Override
 	public void syncMarketIndex(String jsonResult) throws Exception {
@@ -43,7 +42,7 @@ public class MarketIndexServicImpl extends BaseServiceImpl<MarketIndex, Long> im
 			BigDecimal tradeAmount = index.getBigDecimal("tradeAmount");
 			BigDecimal tradeNum = index.getBigDecimal("tradeNum");
 			BigDecimal yestodayClosePrice = index.getBigDecimal("yestodayClosePrice");
-			MarketIndex mi = this.marketIndexRepository.findByDateAndCode(date, marketCode);
+			MarketIndex mi = this.logic.findByDateAndCode(date, marketCode);
 			if (null == mi) {
 				mi = new MarketIndex();
 				mi.setDate(date);
@@ -58,7 +57,7 @@ public class MarketIndexServicImpl extends BaseServiceImpl<MarketIndex, Long> im
 			mi.setTradeAmount(tradeAmount);
 			mi.setTradeNum(tradeNum);
 			mi.setYestodayClosePrice(yestodayClosePrice);
-			this.marketIndexRepository.save(mi);
+			this.logic.save(mi);
 		}
 	}
 

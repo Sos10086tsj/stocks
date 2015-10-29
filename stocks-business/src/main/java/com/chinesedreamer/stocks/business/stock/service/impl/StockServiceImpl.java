@@ -8,16 +8,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chinesedreamer.stocks.business.api.exception.JsonParseException;
+import com.chinesedreamer.stocks.business.stock.logic.StockLogic;
 import com.chinesedreamer.stocks.business.stock.service.StockService;
-import com.chinesedreamer.stocks.domain.base.jpa.BaseServiceImpl;
 import com.chinesedreamer.stocks.domain.stock.model.Stock;
-import com.chinesedreamer.stocks.domain.stock.repository.StockRepository;
 
 @Service
-public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements StockService{
+public class StockServiceImpl implements StockService{
 	
 	@Resource
-	private StockRepository stockRepository;
+	private StockLogic logic;
 
 	@Override
 	public void syncStockIndex(String jsonResult) {
@@ -31,7 +30,7 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements St
 			JSONObject stock = (JSONObject)stocks.get(i);
 			String stockCode = stock.getString("code");
 			String marketCode = stock.getString("market");
-			Stock s = this.stockRepository.findByMarketCodeAndCode(marketCode, stockCode);
+			Stock s = this.logic.findByMarketCodeAndCode(marketCode, stockCode);
 			if (null == s) {
 				s = new Stock();
 			}
@@ -39,13 +38,13 @@ public class StockServiceImpl extends BaseServiceImpl<Stock, Long> implements St
 			s.setMarketCode(marketCode);
 			s.setName(stock.getString("name"));
 			s.setPinyin(stock.getString("pinyin"));
-			this.stockRepository.save(s);
+			this.logic.save(s);
 		}
 	}
 
 	@Override
 	public Stock findByMarketCodeAndCode(String marketCode, String code) {
-		return this.stockRepository.findByMarketCodeAndCode(marketCode, code);
+		return this.logic.findByMarketCodeAndCode(marketCode, code);
 	}
 
 }

@@ -1,8 +1,9 @@
 package com.chinesedreamer.stocks.business.user.service;
 
-import com.chinesedreamer.stocks.domain.base.jpa.BaseService;
+import java.util.List;
+
 import com.chinesedreamer.stocks.domain.user.model.UserFocus;
 
-public interface UserFocusService extends BaseService<UserFocus, Long>{
-
+public interface UserFocusService {
+	public List<UserFocus> findAll();
 }

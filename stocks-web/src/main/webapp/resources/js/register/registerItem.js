@@ -95,7 +95,7 @@ stocks.registerItem = {
 		return invitationCode;
 	},
 	
-	//登陆按钮
+	//注册按钮
 	initRegisterBtn : function(){
 		var registerBtn = new Ext.Button({
 			text: stocks.registerLabel.registerText,

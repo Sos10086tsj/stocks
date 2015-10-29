@@ -1,9 +1,8 @@
 package com.chinesedreamer.stocks.business.stock.service;
 
-import com.chinesedreamer.stocks.domain.base.jpa.BaseService;
 import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
 
-public interface StockIndexService extends BaseService<StockIndex, Long>{
+public interface StockIndexService{
 	/**
 	 * 解析json
 	 * @param jsonResult

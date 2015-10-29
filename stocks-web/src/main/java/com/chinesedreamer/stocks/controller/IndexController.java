@@ -63,12 +63,8 @@ public class IndexController {
 	public ResponseVo registerUser(Model model, HttpServletRequest request){
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		String confirmPassword = request.getParameter("confirmPassword");
 		String invitationCode = request.getParameter("invitationCode");
-		System.out.println("username:" + username);
-		System.out.println("password:" + password);
-		System.out.println("confirmPassword:" + confirmPassword);
-		System.out.println("invitationCode:" + invitationCode);
+		this.userService.register(username, password, invitationCode);
 		return new ResponseVo();
 	}
 	

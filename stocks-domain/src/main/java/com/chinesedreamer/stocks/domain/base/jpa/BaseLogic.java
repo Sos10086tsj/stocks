@@ -1,6 +1,7 @@
 package com.chinesedreamer.stocks.domain.base.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Root;
@@ -67,4 +68,10 @@ public interface BaseLogic<M extends AbstractEntity<?>, ID extends Serializable>
 	 * @return
 	 */
 	public Specification<M> getQuerySpecification(M entity, Root<M> root, CriteriaBuilder cb);
+	
+	/**
+	 * 查询所有
+	 * @return
+	 */
+	public List<M> findAll();
 }

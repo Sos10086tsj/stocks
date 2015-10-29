@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class BaseLogicImpl<M extends AbstractEntity<?>, ID extends Serializable> implements BaseLogic<M, ID> {
 	protected BaseRepository<M, ID> BaseRepository;
-
+	
 	@Autowired
     public void setBaseRepository(BaseRepository<M, ID> baseRepository) {
         this.BaseRepository = baseRepository;
@@ -73,5 +73,10 @@ public class BaseLogicImpl<M extends AbstractEntity<?>, ID extends Serializable>
 			}
 		};
 		return condition;
+	}
+
+	@Override
+	public List<M> findAll() {
+		return this.BaseRepository.findAll();
 	}
 }

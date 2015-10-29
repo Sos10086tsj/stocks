@@ -139,3 +139,13 @@ CREATE TABLE `stocks`.`kdj` (
   `j` DECIMAL(4,2) NULL COMMENT '',
   `rsv` DECIMAL(4,2) NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '');
+
+CREATE TABLE `stocks`.`session` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '',
+  `user` VARCHAR(45) NULL COMMENT '',
+  `sessionId` VARCHAR(45) NOT NULL COMMENT '',
+  `client` INT NULL DEFAULT -1 COMMENT '',
+  `activeDate` TIMESTAMP NULL COMMENT '',
+  PRIMARY KEY (`id`)  COMMENT '',
+  INDEX `INX_SESSION_USER` (`user` ASC, `client` ASC)  COMMENT '',
+  INDEX `INX_SEESION_SESSIONID` (`sessionId` ASC)  COMMENT '');

@@ -86,3 +86,5 @@ stocks-business/.settings/org.eclipse.wst.common.component
 stocks-business/.settings/org.eclipse.wst.common.project.facet.core.xml
 stocks-common/.settings/org.eclipse.wst.common.component
 stocks-common/.settings/org.eclipse.wst.common.project.facet.core.xml
+stocks-domain/.settings/org.eclipse.wst.common.component
+stocks-domain/.settings/org.eclipse.wst.common.project.facet.core.xml
