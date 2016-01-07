@@ -2,7 +2,10 @@ package com.chinesedreamer.stocks.domain.line.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.chinesedreamer.stocks.domain.base.jpa.BaseEntity;
@@ -14,7 +17,7 @@ import com.chinesedreamer.stocks.domain.line.constant.KDJType;
  *
  */
 @Entity
-@Table(name = "dkj")
+@Table(name = "kdj")
 public class KDJ extends BaseEntity<Long>{
 	/**
 	 * 
@@ -22,6 +25,8 @@ public class KDJ extends BaseEntity<Long>{
 	private static final long serialVersionUID = -7849509605924448026L;
 	
 	private Integer date;
+	@Column(name = "type")
+	@Enumerated(EnumType.ORDINAL)
 	private KDJType type;
 	private String stockCode;
 	

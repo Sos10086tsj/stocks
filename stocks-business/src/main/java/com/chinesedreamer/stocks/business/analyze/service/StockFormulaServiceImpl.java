@@ -30,7 +30,7 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		//1. 获取股票当日指数信息
 		StockIndex si = this.stockIndexRepository.findByDateAndStockCode(Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",date)), stockCode);
 		//2. 获取rsv
-		BigDecimal rsv = (si.getClosePrice().subtract(si.getTodayMin())).divide((si.getTodayMax().subtract(si.getTodayMin())));
+		BigDecimal rsv = (si.getClosePrice().subtract(si.getTodayMin())).divide((si.getTodayMax().subtract(si.getTodayMin())),2);
 		//3. 获取前一日kdj
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -42,8 +42,8 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 			yesterdayK = yesterdayKdj.getK();
 			yesterdayD = yesterdayKdj.getD();
 		}
-		BigDecimal k = yesterdayK.multiply(new BigDecimal(2)).divide(new BigDecimal(3)).add(rsv.divide(new BigDecimal(3)));
-		BigDecimal d = yesterdayD.multiply(new BigDecimal(2)).divide(new BigDecimal(3)).add(k.divide(new BigDecimal(3)));
+		BigDecimal k = yesterdayK.multiply(new BigDecimal(2)).divide(new BigDecimal(3), 2).add(rsv.divide(new BigDecimal(3), 2));
+		BigDecimal d = yesterdayD.multiply(new BigDecimal(2)).divide(new BigDecimal(3), 2).add(k.divide(new BigDecimal(3), 2));
 		BigDecimal j = k.multiply(new BigDecimal(3)).subtract(d.multiply(new BigDecimal(2)));
 		KDJ kdj = this.repostory.findByDateAndTypeAndStockCode(Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",date)), type, stockCode);
 		if (null == kdj) {
@@ -57,7 +57,7 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		kdj.setStockCode(stockCode);
 		kdj.setType(type);
 		//4. 交由提醒task处理kdj
-		this.warningService.kdjWarning(kdj);
+		//this.warningService.kdjWarning(kdj);
 		return this.repostory.save(kdj);
 	}
 

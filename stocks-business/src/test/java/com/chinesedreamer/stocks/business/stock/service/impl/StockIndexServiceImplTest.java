@@ -20,14 +20,6 @@ public class StockIndexServiceImplTest extends BaseTest{
 	private StockIndexService stockIndexService;
 	@Resource(name = "stockApiServiceShowApi")
 	private ApiService stockApiServiceShowApiService;
-	
-	@Test
-	public void testFindOne() {
-		
-		StockIndex stock = this.stockIndexService.findOne(1l);
-		assertNotNull(stock);
-		System.out.println(stock.getStockName());
-	}
 
 	@Test
 	@Rollback(value = false)
@@ -47,13 +39,11 @@ public class StockIndexServiceImplTest extends BaseTest{
 	@Rollback(value = false)
 	public void testSyncStockIndexScope(){
 		try {
-			Date startDate = new Date(115, 8, 1);
-			Date endDate = new Date(115,8,30);
-			String jsonResult = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("600655", startDate, endDate);
+			Date startDate = new Date(116, 0, 4);
+			Date endDate = new Date(116,0,6);
+			String jsonResult = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("002024", startDate, endDate);
 			this.stockIndexService.syncStockIndexScope(jsonResult);
 			
-			String jsonResult2 = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("600169", startDate, endDate);
-			this.stockIndexService.syncStockIndexScope(jsonResult2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
