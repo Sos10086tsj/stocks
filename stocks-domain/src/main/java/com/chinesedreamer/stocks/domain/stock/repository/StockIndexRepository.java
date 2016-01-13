@@ -1,5 +1,9 @@
 package com.chinesedreamer.stocks.domain.stock.repository;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+
 import com.chinesedreamer.stocks.domain.base.jpa.BaseRepository;
 import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
 
@@ -12,4 +16,6 @@ import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
  */
 public interface StockIndexRepository extends BaseRepository<StockIndex, Long>{
 	public StockIndex findByDateAndStockCode(Integer date, String stockCode);
+	
+	public List<StockIndex> findByDateLessThanEqualAndStockCodeOrderByDateDesc(Integer date, String stockCode, Pageable pageable);
 }

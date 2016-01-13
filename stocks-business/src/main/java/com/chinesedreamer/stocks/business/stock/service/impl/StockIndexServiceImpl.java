@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chinesedreamer.stocks.business.api.exception.JsonParseException;
+import com.chinesedreamer.stocks.business.stock.logic.MarketStopLogic;
 import com.chinesedreamer.stocks.business.stock.logic.StockIndexLogic;
 import com.chinesedreamer.stocks.business.stock.service.StockIndexService;
 import com.chinesedreamer.stocks.common.util.DateUtil;
@@ -18,6 +19,8 @@ public class StockIndexServiceImpl implements StockIndexService{
 	
 	@Resource
 	private StockIndexLogic logic;
+	@Resource
+	private MarketStopLogic marketStopLogic;
 
 	@Override
 	public void syncStockIndex(String jsonResult) {
@@ -95,22 +98,25 @@ public class StockIndexServiceImpl implements StockIndexService{
 			String stockCode = stockIndex.getString("code");
 			String dateStr = stockIndex.getString("date").replace("-", "");
 			Integer dateInt = Integer.parseInt(dateStr);
-			StockIndex si = this.logic.findByDateAndStockCode(dateInt, stockCode);
-			if (null == si) {
-				si = new StockIndex();
+			//判断是否为休市日
+			if (null == this.marketStopLogic.findByDate(dateInt)) {
+				StockIndex si = this.logic.findByDateAndStockCode(dateInt, stockCode);
+				if (null == si) {
+					si = new StockIndex();
+				}
+				si.setClosePrice(stockIndex.getBigDecimal("close_price"));
+				si.setStockCode(stockCode);
+				
+				si.setDate(dateInt);
+				si.setMarketCode(stockIndex.getString("market"));
+				si.setTodayMax(stockIndex.getBigDecimal("max_price"));
+				si.setTodayMin(stockIndex.getBigDecimal("min_price"));
+				si.setOpenPrice(stockIndex.getBigDecimal("open_price"));
+				si.setStockName(stockIndex.getString("stockName"));
+				si.setTradeNum(stockIndex.getBigDecimal("trade_num"));
+				si.setTradeAmount(stockIndex.getBigDecimal("trade_money"));
+				this.logic.save(si);
 			}
-			si.setClosePrice(stockIndex.getBigDecimal("close_price"));
-			si.setStockCode(stockCode);
-			
-			si.setDate(dateInt);
-			si.setMarketCode(stockIndex.getString("market"));
-			si.setTodayMax(stockIndex.getBigDecimal("max_price"));
-			si.setTodayMin(stockIndex.getBigDecimal("min_price"));
-			si.setOpenPrice(stockIndex.getBigDecimal("open_price"));
-			si.setStockName(stockIndex.getString("stockName"));
-			si.setTradeNum(stockIndex.getBigDecimal("trade_num"));
-			si.setTradeAmount(stockIndex.getBigDecimal("trade_money"));
-			this.logic.save(si);
 		}
 	}
 
