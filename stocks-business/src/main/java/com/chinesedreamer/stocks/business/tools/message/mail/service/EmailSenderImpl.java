@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.velocity.app.VelocityEngine;
@@ -48,6 +49,8 @@ public class EmailSenderImpl implements EmailSender{
 		sender.setHost(configProp.getProperty("system.email.server.host"));
 		sender.setUsername(configProp.getProperty("system.email.to.username"));
 		sender.setPassword(configProp.getProperty("system.email.to.password"));
+		sender.setDefaultEncoding("utf-8");
+		
 			
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom(from);
@@ -56,6 +59,7 @@ public class EmailSenderImpl implements EmailSender{
 		mailMessage.setBcc(recipient.getBcc());
 		mailMessage.setSubject(subject);
 		mailMessage.setText(content);
+
 		
 		Properties prop = new Properties();
 		prop.put("mail.smtp.auth", "true");

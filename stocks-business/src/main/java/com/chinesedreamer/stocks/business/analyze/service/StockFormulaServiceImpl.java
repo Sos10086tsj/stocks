@@ -28,6 +28,8 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 	@Resource
 	private WarningService warningService;
 
+	private final Integer KDJ_CALCULATE_SCALE = 4;
+	private final Integer KDJ_RESULT_SCALE = 2;
 	@Override
 	public KDJ generateKdj(String stockCode,KDJType type, Date date) {
 		//1. 获取股票当日指数信息
@@ -40,7 +42,7 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		Integer yesterdayDateInt = Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",calendar.getTime()));
 		
 		KdjC kdjC = this.getKdjC(stockCode, dateInt, DEFAULT_YESTERDAY_SCOPE);
-		BigDecimal rsv = (si.getClosePrice().subtract(kdjC.getLn())).multiply(new BigDecimal(100)).divide((kdjC.getHn().subtract(kdjC.getLn())),2);
+		BigDecimal rsv = (si.getClosePrice().subtract(kdjC.getLn())).multiply(new BigDecimal(100)).divide((kdjC.getHn().subtract(kdjC.getLn())),KDJ_CALCULATE_SCALE);
 		//3. 获取前一日kdj
 		
 		KDJ yesterdayKdj = this.repostory.findByDateAndTypeAndStockCode(yesterdayDateInt, type, stockCode);
@@ -52,11 +54,13 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		}
 		
 		BigDecimal zero = new BigDecimal("0");
-		BigDecimal k = yesterdayK.multiply(new BigDecimal(2)).divide(new BigDecimal(3), 2).add(rsv.divide(new BigDecimal(3), 2));
+		BigDecimal rate_2 = new BigDecimal("2");
+		BigDecimal rate_3 = new BigDecimal("3");
+		BigDecimal k = yesterdayK.multiply(rate_2).divide(rate_3, KDJ_CALCULATE_SCALE).add(rsv.divide(rate_3, KDJ_CALCULATE_SCALE)).setScale(KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
 		k = (k.compareTo(zero) <= 0) ? zero : k;
-		BigDecimal d = yesterdayD.multiply(new BigDecimal(2)).divide(new BigDecimal(3), 2).add(k.divide(new BigDecimal(3), 2));
+		BigDecimal d = yesterdayD.multiply(rate_2).divide(rate_3, KDJ_CALCULATE_SCALE).add(k.divide(rate_3, KDJ_CALCULATE_SCALE)).setScale(KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
 		d = (d.compareTo(zero) <= 0) ? zero : d;
-		BigDecimal j = k.multiply(new BigDecimal(3)).subtract(d.multiply(new BigDecimal(2)));
+		BigDecimal j = k.multiply(rate_3).subtract(d.multiply(rate_2)).setScale(KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
 		j = (j.compareTo(zero) <= 0) ? zero : j;
 		KDJ kdj = this.repostory.findByDateAndTypeAndStockCode(Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",date)), type, stockCode);
 		if (null == kdj) {
@@ -70,7 +74,7 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		kdj.setStockCode(stockCode);
 		kdj.setType(type);
 		//4. 交由提醒task处理kdj
-		//this.warningService.kdjWarning(kdj);
+		this.warningService.kdjWarning(kdj);
 		return this.repostory.save(kdj);
 	}
 

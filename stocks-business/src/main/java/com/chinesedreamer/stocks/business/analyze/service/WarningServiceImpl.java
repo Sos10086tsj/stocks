@@ -34,11 +34,11 @@ public class WarningServiceImpl implements WarningService{
 			if (null != stock) {
 				stockName = stock.getName();
 			}
-			String[] to = new String[]{"paristao1989@163.com}"};
-			String[] cc = new String[]{"paristao1989@163.com}"};
-			String[] bcc = new String[]{"paristao1989@163.com}"};
+			String[] to = new String[]{"paris1989@163.com"};
+			String[] cc = new String[]{"paris1989@163.com"};
+			String[] bcc = new String[]{"paris1989@163.com"};
 			EmailRecipient recipient = new EmailRecipient(to, cc, bcc);
-			emailSender.sendEmail("Stock系统", recipient, "股票KDJ提醒", 
+			emailSender.sendEmail("paris1989@163.com", recipient, "股票KDJ提醒", 
 					stockName + "(" + kdj.getStockCode() + ")达到KDJ预警条件。K:" + kdj.getK() + "	d:" + kdj.getK() + "	j:" + kdj.getJ());
 		}
 	}
