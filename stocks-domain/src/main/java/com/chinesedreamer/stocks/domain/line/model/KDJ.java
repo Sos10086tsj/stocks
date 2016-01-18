@@ -17,7 +17,7 @@ import com.chinesedreamer.stocks.domain.line.constant.KDJType;
  *
  */
 @Entity
-@Table(name = "kdj")
+@Table(name = "line_kdj")
 public class KDJ extends BaseEntity<Long>{
 	/**
 	 * 

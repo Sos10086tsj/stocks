@@ -1,7 +1,6 @@
 package com.chinesedreamer.stocks.business.analyze.service;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,11 +9,14 @@ import javax.annotation.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.chinesedreamer.stocks.business.analyze.constant.StockFormulaConstant;
 import com.chinesedreamer.stocks.business.analyze.vo.KdjC;
 import com.chinesedreamer.stocks.common.util.DateUtil;
 import com.chinesedreamer.stocks.domain.line.constant.KDJType;
 import com.chinesedreamer.stocks.domain.line.model.KDJ;
+import com.chinesedreamer.stocks.domain.line.model.MA;
 import com.chinesedreamer.stocks.domain.line.repository.KDJRepository;
+import com.chinesedreamer.stocks.domain.line.repository.MARepository;
 import com.chinesedreamer.stocks.domain.stock.model.StockIndex;
 import com.chinesedreamer.stocks.domain.stock.repository.StockIndexRepository;
 
@@ -24,25 +26,25 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 	@Resource
 	private StockIndexRepository stockIndexRepository;
 	@Resource
+	private MARepository mARepository;
+	@Resource
 	private KDJRepository repostory;
 	@Resource
 	private WarningService warningService;
 
-	private final Integer KDJ_CALCULATE_SCALE = 4;
-	private final Integer KDJ_RESULT_SCALE = 2;
 	@Override
 	public KDJ generateKdj(String stockCode,KDJType type, Date date) {
 		//1. 获取股票当日指数信息
 		StockIndex si = this.stockIndexRepository.findByDateAndStockCode(Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",date)), stockCode);
 		//2. 获取rsv
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		Integer dateInt = Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",calendar.getTime()));
-		calendar.add(Calendar.DAY_OF_MONTH, -1);
-		Integer yesterdayDateInt = Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",calendar.getTime()));
+		Integer dateInt = DateUtil.date2Int(date, 0, null);
+		Integer yesterdayDateInt = DateUtil.date2Int(date, -1, null);
 		
-		KdjC kdjC = this.getKdjC(stockCode, dateInt, DEFAULT_YESTERDAY_SCOPE);
-		BigDecimal rsv = (si.getClosePrice().subtract(kdjC.getLn())).multiply(new BigDecimal(100)).divide((kdjC.getHn().subtract(kdjC.getLn())),KDJ_CALCULATE_SCALE);
+		KdjC kdjC = this.getKdjC(stockCode, dateInt, StockFormulaConstant.KDJ.DEFAULT_YESTERDAY_SCOPE);
+		BigDecimal rsv = (si.getClosePrice().subtract(kdjC.getLn()))
+				.multiply(new BigDecimal(100))
+				.divide((kdjC.getHn()
+						.subtract(kdjC.getLn())),StockFormulaConstant.KDJ.KDJ_CALCULATE_SCALE);
 		//3. 获取前一日kdj
 		
 		KDJ yesterdayKdj = this.repostory.findByDateAndTypeAndStockCode(yesterdayDateInt, type, stockCode);
@@ -56,11 +58,16 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		BigDecimal zero = new BigDecimal("0");
 		BigDecimal rate_2 = new BigDecimal("2");
 		BigDecimal rate_3 = new BigDecimal("3");
-		BigDecimal k = yesterdayK.multiply(rate_2).divide(rate_3, KDJ_CALCULATE_SCALE).add(rsv.divide(rate_3, KDJ_CALCULATE_SCALE)).setScale(KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		BigDecimal k = yesterdayK.multiply(rate_2).divide(rate_3, StockFormulaConstant.KDJ.KDJ_CALCULATE_SCALE)
+				.add(rsv.divide(rate_3, StockFormulaConstant.KDJ.KDJ_CALCULATE_SCALE))
+				.setScale(StockFormulaConstant.KDJ.KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
 		k = (k.compareTo(zero) <= 0) ? zero : k;
-		BigDecimal d = yesterdayD.multiply(rate_2).divide(rate_3, KDJ_CALCULATE_SCALE).add(k.divide(rate_3, KDJ_CALCULATE_SCALE)).setScale(KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		BigDecimal d = yesterdayD.multiply(rate_2).divide(rate_3, StockFormulaConstant.KDJ.KDJ_CALCULATE_SCALE)
+				.add(k.divide(rate_3, StockFormulaConstant.KDJ.KDJ_CALCULATE_SCALE))
+				.setScale(StockFormulaConstant.KDJ.KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
 		d = (d.compareTo(zero) <= 0) ? zero : d;
-		BigDecimal j = k.multiply(rate_3).subtract(d.multiply(rate_2)).setScale(KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		BigDecimal j = k.multiply(rate_3).subtract(d.multiply(rate_2))
+				.setScale(StockFormulaConstant.KDJ.KDJ_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
 		j = (j.compareTo(zero) <= 0) ? zero : j;
 		KDJ kdj = this.repostory.findByDateAndTypeAndStockCode(Integer.valueOf(DateUtil.getFormatTime("yyyyMMdd",date)), type, stockCode);
 		if (null == kdj) {
@@ -78,16 +85,15 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		return this.repostory.save(kdj);
 	}
 
-	private final Integer DEFAULT_YESTERDAY_SCOPE = 9;
 	/**
-	 * 获取前一日K值，默认9天
+	 * 获取前一日K值
 	 * @param stockCode
 	 * @param type
 	 * @param date
 	 * @return
 	 */
 	private KdjC getKdjC(String stockCode,Integer date, Integer  yesterdayScop){
-		List<StockIndex> stockIndexs = this.stockIndexRepository.findByDateLessThanEqualAndStockCodeOrderByDateDesc(date, stockCode, new PageRequest(0, yesterdayScop));
+		List<StockIndex> stockIndexs = this.stockIndexRepository.findByDateLessThanEqualAndStockCodeOrderByDateDesc(date, stockCode, new PageRequest(0, yesterdayScop - 1));
 		
 		KdjC kdjC = new KdjC();
 		BigDecimal ln = null;
@@ -109,5 +115,75 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		kdjC.setHn(hn);
 		kdjC.setLn(ln);
 		return kdjC;
+	}
+
+	@Override
+	public MA generateMa(String stockCode, Date date) {
+		Integer dateInt = DateUtil.date2Int(date, 0, null);
+		List<StockIndex> stockIndexs = this.stockIndexRepository.findByDateLessThanEqualAndStockCodeOrderByDateDesc(
+				dateInt, stockCode, new PageRequest(0, StockFormulaConstant.MA.DAY_SCOPE_60));
+		
+		BigDecimal zero = new BigDecimal("0");
+		BigDecimal maDefault = zero;
+		BigDecimal ma5 = zero;
+		BigDecimal ma10 = zero;
+		BigDecimal ma20 = zero;
+		BigDecimal ma30 = zero;
+		BigDecimal ma60 = zero;
+		
+		for (int i = 0; i < stockIndexs.size(); i++) {
+			StockIndex si = stockIndexs.get(i);
+			if (i < StockFormulaConstant.MA.DAY_SCOPE_DEFAULT) {
+				maDefault = maDefault.add(si.getClosePrice());
+			}
+			if (i < StockFormulaConstant.MA.DAY_SCOPE_5) {
+				ma5 = ma5.add(si.getClosePrice());
+			}
+			if (i < StockFormulaConstant.MA.DAY_SCOPE_10) {
+				ma10 = ma10.add(si.getClosePrice());
+			}
+			if (i < StockFormulaConstant.MA.DAY_SCOPE_20) {
+				ma20 = ma20.add(si.getClosePrice());
+			}
+			if (i < StockFormulaConstant.MA.DAY_SCOPE_30) {
+				ma30 = ma30.add(si.getClosePrice());
+			}
+			if (i < StockFormulaConstant.MA.DAY_SCOPE_60) {
+				ma60 = ma60.add(si.getClosePrice());
+			}
+		}
+		
+		//MA计算
+		maDefault = maDefault.divide(new BigDecimal(StockFormulaConstant.MA.DAY_SCOPE_DEFAULT), StockFormulaConstant.MA.MA_CALCULATE_SCALE)
+				.setScale(StockFormulaConstant.MA.MA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		ma5 = ma5.divide(new BigDecimal(StockFormulaConstant.MA.DAY_SCOPE_5), StockFormulaConstant.MA.MA_CALCULATE_SCALE)
+				.setScale(StockFormulaConstant.MA.MA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		ma10 = ma10.divide(new BigDecimal(StockFormulaConstant.MA.DAY_SCOPE_10), StockFormulaConstant.MA.MA_CALCULATE_SCALE)
+				.setScale(StockFormulaConstant.MA.MA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		ma20 = ma20.divide(new BigDecimal(StockFormulaConstant.MA.DAY_SCOPE_20), StockFormulaConstant.MA.MA_CALCULATE_SCALE)
+				.setScale(StockFormulaConstant.MA.MA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		ma30 = ma30.divide(new BigDecimal(StockFormulaConstant.MA.DAY_SCOPE_30), StockFormulaConstant.MA.MA_CALCULATE_SCALE)
+				.setScale(StockFormulaConstant.MA.MA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		ma60 = ma60.divide(new BigDecimal(StockFormulaConstant.MA.DAY_SCOPE_60), StockFormulaConstant.MA.MA_CALCULATE_SCALE)
+				.setScale(StockFormulaConstant.MA.MA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		
+		MA ma = this.mARepository.findByStockCodeAndDate(stockCode, dateInt);
+		if (null == ma) {
+			ma = new MA();
+			ma.setDate(dateInt);
+			ma.setStockCode(stockCode);
+		}
+		ma.setMa(maDefault);
+		ma.setMa5(ma5);
+		ma.setMa10(ma10);
+		ma.setMa20(ma20);
+		ma.setMa30(ma30);
+		ma.setMa60(ma60);
+		
+		ma = this.mARepository.save(ma);
+		
+		this.warningService.maWarning(ma);
+		
+		return ma;
 	}
 }

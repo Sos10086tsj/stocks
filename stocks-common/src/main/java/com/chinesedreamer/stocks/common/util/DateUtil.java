@@ -34,4 +34,21 @@ public class DateUtil {
 		return format.format(date);
 	}
 	
+	/**
+	 * 日期格式转整型
+	 * @param date 
+	 * @param interval(day of month)
+	 * @return 20150101
+	 */
+	public static Integer date2Int(Date date, Integer interval, String format) {
+		if (StringUtils.isEmpty(format)) {
+			format = "yyyyMMdd";
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		if (null != interval && interval != 0) {
+			calendar.add(Calendar.DAY_OF_MONTH, interval);
+		}
+		return Integer.valueOf(DateUtil.getFormatTime(format,calendar.getTime()));
+	}
 }

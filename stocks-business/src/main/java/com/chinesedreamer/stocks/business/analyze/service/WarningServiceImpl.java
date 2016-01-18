@@ -10,6 +10,7 @@ import com.chinesedreamer.stocks.business.analyze.constant.WarningConstant;
 import com.chinesedreamer.stocks.business.tools.message.mail.config.EmailRecipient;
 import com.chinesedreamer.stocks.business.tools.message.mail.service.EmailSender;
 import com.chinesedreamer.stocks.domain.line.model.KDJ;
+import com.chinesedreamer.stocks.domain.line.model.MA;
 import com.chinesedreamer.stocks.domain.stock.model.Stock;
 import com.chinesedreamer.stocks.domain.stock.repository.StockRepository;
 
@@ -41,6 +42,12 @@ public class WarningServiceImpl implements WarningService{
 			emailSender.sendEmail("paris1989@163.com", recipient, "股票KDJ提醒", 
 					stockName + "(" + kdj.getStockCode() + ")达到KDJ预警条件。K:" + kdj.getK() + "	d:" + kdj.getK() + "	j:" + kdj.getJ());
 		}
+	}
+
+	@Override
+	public void maWarning(MA ma) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
