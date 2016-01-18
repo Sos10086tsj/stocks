@@ -39,8 +39,8 @@ public class StockIndexServiceImplTest extends BaseTest{
 	@Rollback(value = false)
 	public void testSyncStockIndexScope(){
 		try {
-			Date startDate = new Date(115, 11, 20);
-			Date endDate = new Date(116,0,6);
+			Date startDate = new Date(115, 10, 23);
+			Date endDate = new Date(115, 11, 1);
 			String jsonResult = this.stockApiServiceShowApiService.getStockIndexScopeApiReust("002024", startDate, endDate);
 			this.stockIndexService.syncStockIndexScope(jsonResult);
 			

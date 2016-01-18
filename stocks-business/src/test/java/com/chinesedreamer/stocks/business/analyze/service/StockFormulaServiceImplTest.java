@@ -1,6 +1,6 @@
 package com.chinesedreamer.stocks.business.analyze.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Calendar;
 
@@ -13,6 +13,7 @@ import com.chinesedreamer.stocks.business.base.BaseTest;
 import com.chinesedreamer.stocks.domain.line.constant.KDJType;
 import com.chinesedreamer.stocks.domain.line.model.KDJ;
 import com.chinesedreamer.stocks.domain.line.model.MA;
+import com.chinesedreamer.stocks.domain.line.model.MACD;
 
 public class StockFormulaServiceImplTest extends BaseTest{
 	@Resource
@@ -39,4 +40,14 @@ public class StockFormulaServiceImplTest extends BaseTest{
 		System.out.println("*************************" + ma);
 	}
 	
+	@Test
+	@Rollback(value = false)
+	public void testGenerateMacd(){
+		System.out.println(">>>>>>>>>>>>> start");
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(2016, 0, 5);
+		MACD macd = this.stockFormulaSevice.generateMacd("002024", calendar.getTime());
+		assertNotNull(macd);
+		System.out.println("*************************" + macd);
+	}
 }

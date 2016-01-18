@@ -11,6 +11,7 @@ import com.chinesedreamer.stocks.business.tools.message.mail.config.EmailRecipie
 import com.chinesedreamer.stocks.business.tools.message.mail.service.EmailSender;
 import com.chinesedreamer.stocks.domain.line.model.KDJ;
 import com.chinesedreamer.stocks.domain.line.model.MA;
+import com.chinesedreamer.stocks.domain.line.model.MACD;
 import com.chinesedreamer.stocks.domain.stock.model.Stock;
 import com.chinesedreamer.stocks.domain.stock.repository.StockRepository;
 
@@ -46,6 +47,12 @@ public class WarningServiceImpl implements WarningService{
 
 	@Override
 	public void maWarning(MA ma) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void macdWarning(MACD macd) {
 		// TODO Auto-generated method stub
 		
 	}
