@@ -44,7 +44,9 @@ public class UserSessionLogicImpl extends BaseCacheAspect implements UserSession
 	public void clear(UserSession userSession) {
 		this.evict(userSessionPrefix + userSession.getSessionId());
 		userSession = this.repository.findBySessionId(userSession.getSessionId());
-		this.repository.delete(userSession);
+		if (null != userSession) {
+			this.repository.delete(userSession);
+		}
 	}
 
 	@Override
@@ -53,7 +55,7 @@ public class UserSessionLogicImpl extends BaseCacheAspect implements UserSession
 		String sessionId = request.getSession().getId();
 		UserSession userSession = this.get(userSessionPrefix + sessionId);
 		if (null == userSession) {
-			throw new SessionOverdueException("Session Overdue, please relogin.");
+			throw new SessionOverdueException("Session not exist or Overdue, please relogin.");
 		}
 	}
 

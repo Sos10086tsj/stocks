@@ -44,7 +44,7 @@ stocks.loginItem = {
 						waitMsg : stocks.loginLabel.waitingMsg,
 						timeout : 60000,
 						success : function(form, action){
-							alert("success")
+							window.location.href = ctx + "/homepage";
 						},
 						failure : function(form, action){
 							alert("failure")

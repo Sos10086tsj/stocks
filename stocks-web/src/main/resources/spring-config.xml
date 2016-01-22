@@ -12,6 +12,17 @@
           http://www.springframework.org/schema/task 
           http://www.springframework.org/schema/task/spring-task-3.1.xsd   
           ">
+	
+	<bean id="userSessionService" class="com.chinesedreamer.stocks.business.session.service.impl.UserSessionServiceImpl"></bean>
+	<bean id="userService" class="com.chinesedreamer.stocks.business.user.service.impl.UserServiceImpl"></bean>
+	<bean id="sessionFilter" class="com.chinesedreamer.stocks.business.filter.SessionFilter" >
+		<property name="userSessionService"> 
+			<ref bean="userSessionService"/>  
+    	</property>
+    	<property name="userService"> 
+			<ref bean="userService"/>  
+    	</property>
+	</bean>
 
 	<context:component-scan base-package="com.chinesedreamer.stocks.*">
 		<context:exclude-filter type="annotation"

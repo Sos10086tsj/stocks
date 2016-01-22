@@ -51,7 +51,7 @@ public class SessionFilter implements Filter{
 		this.userService = userService;
 	}
 
-	private String sessionOverduePage = "login";
+	private String sessionOverduePage = "";
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

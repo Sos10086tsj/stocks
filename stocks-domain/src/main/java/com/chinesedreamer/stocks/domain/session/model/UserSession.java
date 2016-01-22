@@ -28,7 +28,7 @@ public class UserSession extends BaseEntity<Long>{
 	/**
 	 * 用户外键id
 	 */
-	@Column(name = "use")
+	@Column(name = "user")
 	private String user;
 	
 	/**

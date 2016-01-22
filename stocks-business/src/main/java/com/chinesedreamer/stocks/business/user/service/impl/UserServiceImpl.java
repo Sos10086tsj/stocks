@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 		if (null == user) {
 			throw new UserNotExistException(UserException.USER_NOT_EXIST + " " + UserException.USER_NOT_EXIST.getMessage() + " user:" + username);
 		}
-		if (!user.getPassword().equals(EncryptionUtil.md5L32(user.getPassword() + user.getSalt()))) {
+		if (!user.getPassword().equals(EncryptionUtil.md5L32(password + user.getSalt()))) {
 			throw new UserPassNotMatchException(UserException.USER_PASS_NOT_MATCH + " " + UserException.USER_PASS_NOT_MATCH.getMessage() + " user:" + username + " password:" + password);
 		}
 		logger.info("user:{} login at {}.", username, new Date());
@@ -74,6 +74,14 @@ public class UserServiceImpl implements UserService{
 		us.setActiveDate(new Date());
 		us.setClient(UserSessionClient.get(source));
 		us.setSessionId(SessionFilter.SessionContext.getContext().getSession().getId());
-		us.setUser(user.getUsername());
+		us.setUser(user.getId().toString());
+		
+		us = this.userSessionLogic.save(us);
+		this.userSessionLogic.saveUserSessionCache(us);
+	}
+
+	@Override
+	public User getById(Long id) {
+		return this.logic.findOne(id);
 	}
 }
