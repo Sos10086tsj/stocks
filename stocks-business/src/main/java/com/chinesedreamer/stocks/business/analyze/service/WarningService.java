@@ -22,4 +22,10 @@ public interface WarningService {
 	 * @param macd
 	 */
 	public void macdWarning(MACD macd);
+	
+	/**
+	 * MACD缺少初始值提醒
+	 * @param stockCode
+	 */
+	public void macdMissingWarning(String stockCode);
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import com.chinesedreamer.stocks.domain.stock.repository.StockIndexRepository;
 
 @Service
 public class StockFormulaServiceImpl implements StockFormulaSevice{
+	
+	private Logger logger = LoggerFactory.getLogger(StockFormulaServiceImpl.class);
 	
 	@Resource
 	private StockIndexRepository stockIndexRepository;
@@ -200,7 +204,9 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 		Integer yesterdayDateInt = DateUtil.date2Int(date, -1, null);
 		MACD yesterdayMacd = this.mACDRepository.findByStockCodeAndDate(stockCode, yesterdayDateInt);
 		if (null == yesterdayMacd) {
-			yesterdayMacd = this.generateYesterDayMacd(stockCode, date);
+			this.logger.info("Stock# {} missing yesterday's MACD, please fix it first!", stockCode);
+			this.warningService.macdMissingWarning(stockCode);
+			return null;
 		}
 		
 		MACD macd = this.mACDRepository.findByStockCodeAndDate(stockCode, dateInt);
@@ -210,88 +216,42 @@ public class StockFormulaServiceImpl implements StockFormulaSevice{
 			macd.setStockCode(stockCode);
 		}
 		
-		BigDecimal ema12 = yesterdayMacd.getEma12().multiply(new BigDecimal(11 / 12))
-				.add(si.getClosePrice().multiply(new BigDecimal(2 / 13)))
-				.setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
-		BigDecimal ema26 = yesterdayMacd.getEma26().multiply(new BigDecimal(23/27))
-				.add(si.getClosePrice().multiply(new BigDecimal(2 / 27)))
-				.setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		BigDecimal ema12 = yesterdayMacd.getEma12()
+				.multiply(new BigDecimal(11))
+				.add(
+						si.getClosePrice()
+						.multiply(new BigDecimal(2))
+					)
+				.divide(new BigDecimal(13), StockFormulaConstant.MACD.MACD_CALCULATE_SCALE);
+		
+		BigDecimal ema26 = yesterdayMacd.getEma26()
+				.multiply(new BigDecimal(25))
+				.add(
+						si.getClosePrice()
+						.multiply(new BigDecimal(2))
+					)
+				.divide(new BigDecimal(27), StockFormulaConstant.MACD.MACD_CALCULATE_SCALE);
 
 		BigDecimal diff = ema12.subtract(ema26);
 		
-		BigDecimal dea = yesterdayMacd.getDea().multiply(new BigDecimal(8/10))
-				.add(diff.multiply(new BigDecimal(2 / 10)))
-				.setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
+		BigDecimal dea = yesterdayMacd.getDea()
+				.multiply(new BigDecimal(8))
+				.add(
+						diff
+						.multiply(new BigDecimal(2))
+					)
+				.divide(new BigDecimal(10), StockFormulaConstant.MACD.MACD_CALCULATE_SCALE);
 		
-		macd.setEma12(ema12);
-		macd.setEma26(ema26);
-		macd.setDiff(diff);
-		macd.setDea(dea);
+		macd.setEma12(ema12.setScale(StockFormulaConstant.MACD.MACD_EMA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP));
+		macd.setEma26(ema26.setScale(StockFormulaConstant.MACD.MACD_EMA_RESULT_SCALE, BigDecimal.ROUND_HALF_UP));
+		macd.setDiff(diff.setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP));
+		macd.setDea(dea.setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP));
+		macd.setMacd( diff.subtract(dea).multiply(new BigDecimal(2)).setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP));
 		macd = this.mACDRepository.save(macd);
 		
 		this.warningService.macdWarning(macd);
 		
 		return macd;
 	}
-	
-	
-	/**
-	 * 模拟计算 EMA
-	 * @param stockCode
-	 * @param date
-	 * @return
-	 */
-	private MACD generateYesterDayMacd(String stockCode,Date date) {
-		Integer dateInt = DateUtil.date2Int(date, -1, null);
-		List<StockIndex> stockIndexs = this.stockIndexRepository.findByDateLessThanEqualAndStockCodeOrderByDateDesc(
-				dateInt, stockCode, new PageRequest(0, StockFormulaConstant.MACD.DAY_SCOPE_26));
-		
-		MACD macd = new MACD();
-		
-		macd.setEma12(this.calculateEma(stockIndexs, StockFormulaConstant.MACD.DAY_SCOPE_12));
-		macd.setEma26(this.calculateEma(stockIndexs, StockFormulaConstant.MACD.DAY_SCOPE_26));
-		//TODO 
-		macd.setDea(dea);
-		
-		return macd;
-	}
-	
-	/**
-	 * 计算EMA
-	 * @param stockIndexs
-	 * @param dayScope
-	 * @return
-	 */
-	private BigDecimal calculateEma(List<StockIndex> stockIndexs, Integer dayScope) {
-		BigDecimal ALPHA = null;
-		if (dayScope.equals(StockFormulaConstant.MACD.DAY_SCOPE_12)) {
-			ALPHA = StockFormulaConstant.MACD.ALPHA_12;
-		}else if (dayScope.equals(StockFormulaConstant.MACD.DAY_SCOPE_26)) {
-			ALPHA = StockFormulaConstant.MACD.ALPHA_26;
-		}
-		
-		BigDecimal zero = new BigDecimal(0);
-		BigDecimal divisor = zero;
-		BigDecimal dividend = zero;
-		
-		BigDecimal one = new BigDecimal(1);
-		
-		for (int i = 0; i < dayScope; i++) {
-			StockIndex si = stockIndexs.get(i);
-			BigDecimal price = si.getClosePrice();
-			
-			BigDecimal pow = (one.subtract(ALPHA)).pow(i);
-			
-			divisor = divisor.add(price.multiply(pow));
-			dividend = dividend.add(pow);
-		}
-		
-		//防止被除数为0
-		if (dividend.compareTo(zero) == 0) {
-			dividend = one;
-		}
-		
-		return divisor.divide(dividend, StockFormulaConstant.MACD.MACD_CALCULATE_SCALE)
-				.setScale(StockFormulaConstant.MACD.MACD_RESULT_SCALE, BigDecimal.ROUND_HALF_UP);
-	}
+
 }

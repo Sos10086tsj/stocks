@@ -34,6 +34,9 @@ public class MACD extends BaseEntity<Long>{
 	
 	@Column
 	private BigDecimal dea;
+	
+	@Column
+	private BigDecimal macd;
 
 	public String getStockCode() {
 		return stockCode;
@@ -57,6 +60,10 @@ public class MACD extends BaseEntity<Long>{
 
 	public BigDecimal getDea() {
 		return dea;
+	}
+
+	public BigDecimal getMacd() {
+		return macd;
 	}
 
 	public void setStockCode(String stockCode) {
@@ -83,11 +90,15 @@ public class MACD extends BaseEntity<Long>{
 		this.dea = dea;
 	}
 
+	public void setMacd(BigDecimal macd) {
+		this.macd = macd;
+	}
+
 	@Override
 	public String toString() {
 		return "MACD [stockCode=" + stockCode + ", date=" + date + ", ema12=" + ema12 + ", ema26=" + ema26 + ", diff="
-				+ diff + ", dea=" + dea + "]";
+				+ diff + ", dea=" + dea + ", macd=" + macd + "]";
 	}
-	
+
 	
 }

@@ -57,4 +57,10 @@ public class WarningServiceImpl implements WarningService{
 		
 	}
 
+	@Override
+	public void macdMissingWarning(String stockCode) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

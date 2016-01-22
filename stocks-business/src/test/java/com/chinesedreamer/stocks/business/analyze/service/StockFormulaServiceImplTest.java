@@ -45,7 +45,7 @@ public class StockFormulaServiceImplTest extends BaseTest{
 	public void testGenerateMacd(){
 		System.out.println(">>>>>>>>>>>>> start");
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(2016, 0, 5);
+		calendar.set(2016, 0, 6);
 		MACD macd = this.stockFormulaSevice.generateMacd("002024", calendar.getTime());
 		assertNotNull(macd);
 		System.out.println("*************************" + macd);
